@@ -9,17 +9,17 @@ services:
 
   db:
     image: postgres:16
-    container_name: postgres_db
+    container_name: postres_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: netuser
-      POSTGRES_PASSWORD: netpass
-      POSTGRES_DB: netdb
+      POSTGRES_USER: bruised_banana_admin
+      POSTGRES_PASSWORD: supersecret06
+      POSTGRES_DB: main_db
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./book.sql:/docker-entrypoint-initdb.d/book.sql:ro
+      - ./db-schema.sql:/docker-entrypoint-initdb.d/db-schema.sql:ro
 
   frontend:
     build: ./frontend
