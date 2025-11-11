@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
-
+import moviesRouter from "./routes/movies.js";
+import usersRouter from "./routes/users.js";
 import bookRouter from "./routers/book_router.js";
 
 
@@ -17,6 +18,8 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/book", bookRouter);
+app.use("/movies", moviesRouter)
+app.use("/users", usersRouter);
 
 app.listen(port, () => {
   console.log(`Server is listening port ${port}`);
