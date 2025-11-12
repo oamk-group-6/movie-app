@@ -8,10 +8,11 @@ import {
   changePassword,
   patchUser
 } from "../controllers/usersController.js";
+import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/", getUsers);
+router.get("/", auth, getUsers);
 router.get("/:id", getUserById);
 router.post("/", createUser);   // for admin, not for registration
 router.put("/:id", updateUser);

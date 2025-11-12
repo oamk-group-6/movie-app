@@ -11,6 +11,14 @@ export async function getUserById(id) {
   return result.rows[0] || null;
 }
 
+export async function getUserByEmail(email) {
+  const result = await pool.query(
+    "SELECT * FROM users WHERE email = $1",
+    [email]
+  );
+  return result.rows[0] || null;
+}
+
 export async function addUser(user) {
   const hash = await bcrypt.hash(user.password, 10);
   const query = `
@@ -20,6 +28,11 @@ export async function addUser(user) {
   `;
   const values = [user.username, user.email, hash, user.avatar_url, user.bio];
   const result = await pool.query(query, values);
+
+  if (result.rows.length === 0) {
+    throw new Error("User insertion returned no rows");
+  }
+
   return result.rows[0];
 }
 
