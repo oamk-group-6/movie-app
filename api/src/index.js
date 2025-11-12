@@ -1,9 +1,12 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
-import moviesRouter from "./routes/movies.js";
-import usersRouter from "./routes/users.js";
+import moviesRouter from "./routers/movies.js";
+import usersRouter from "./routers/users.js";
 import bookRouter from "./routers/book_router.js";
+import groupsRouter from "./routers/groups.js"
+import listsRouter from "./routers/lists.js"
+import commetnsRouter from "./routers/comments.js"
 
 
 const app = express();
@@ -18,8 +21,11 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/book", bookRouter);
-app.use("/movies", moviesRouter)
+app.use("/movies", moviesRouter);
 app.use("/users", usersRouter);
+app.use("/groups", groupsRouter);
+app.use("/lists", listsRouter);
+app.use("/comments", commetnsRouter);
 
 app.listen(port, () => {
   console.log(`Server is listening port ${port}`);
