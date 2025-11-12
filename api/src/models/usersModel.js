@@ -1,4 +1,4 @@
-import pool from "../models/db.js";
+import pool from "../database.js";
 import bcrypt from "bcrypt";
 
 export async function getAllUsers() {

@@ -1,10 +1,8 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
-import moviesRouter from "./routes/movies.js";
-import usersRouter from "./routes/users.js";
-import bookRouter from "./routers/book_router.js";
-
+import moviesRouter from "./routers/movies.js";
+import usersRouter from "./routers/users.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -17,7 +15,6 @@ app.get("/", async (req, res) => {
   res.send("Postgres API esimerkki");
 });
 
-app.use("/book", bookRouter);
 app.use("/movies", moviesRouter)
 app.use("/users", usersRouter);
 
