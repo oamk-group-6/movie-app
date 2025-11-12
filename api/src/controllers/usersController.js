@@ -24,9 +24,10 @@ export const getUserById = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const newUser = await usersModel.addUser(req.body);
+    console.log("addUser returned: ", newUser);
     res.status(201).json(newUser);
   } catch (err) {
-    console.error(err);
+    console.error("Detailed error: ",err);
     res.status(500).json({ error: "Database error" });
   }
 };
