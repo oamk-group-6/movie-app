@@ -9,7 +9,7 @@ services:
 
   db:
     image: postgres:16
-    container_name: postres_db
+    container_name: postgres_db
     restart: unless-stopped
     environment:
       POSTGRES_USER: bruised_banana_admin

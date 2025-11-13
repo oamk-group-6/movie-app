@@ -25,7 +25,8 @@ CREATE TABLE "movies" (
   "country" VARCHAR(100),
   "rating_avg" FLOAT,
   "rating_count" INT,
-  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_external_id UNIQUE (external_id)
 );
 
 -- GROUPS
@@ -100,6 +101,7 @@ CREATE TABLE "comments" (
   CONSTRAINT fk_comments_movie FOREIGN KEY ("movie_id") REFERENCES "movies" ("id") ON DELETE CASCADE,
   CONSTRAINT fk_comments_list FOREIGN KEY ("list_id") REFERENCES "lists" ("id") ON DELETE CASCADE
 );
+
 
 
 CREATE INDEX idx_movies_external_id ON movies (external_id);
