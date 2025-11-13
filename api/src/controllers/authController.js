@@ -8,6 +8,7 @@ export async function registerUser(req, res, next) {
   try {
     const { username, email, password } = req.body;
 
+    //Tarkistetaan että kaikki kentät on täytetty
     if (!username || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
@@ -21,15 +22,16 @@ export async function registerUser(req, res, next) {
     //Hashataan salasana
     const hash = await bcrypt.hash(password, 10);
 
-    //addUser odottaa user-objektia
+    //Lisätään uusi käyttäjä tietokantaan
     const newUser = await addUser({
       username,
       email,
-      password: password, // tätä ei tallenneta, mutta annetaan funktiolle rakenne täydeksi
+      password: password,
       avatar_url: null,
       bio: null,
     });
 
+    //Palautetaan onnistumisviesti
     res.status(201).json({
       message: "User registered successfully",
       user: {
@@ -49,11 +51,12 @@ export async function loginUser(req, res, next) {
   try {
     const { email, password } = req.body;
 
+    //Tarkistetaan että kaikki kentät on täytetty
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
-    //Haetaan käyttäjä tietokannasta
+    //Haetaan käyttäjä tietokannasta sähköpostin perusteella
     const user = await getUserByEmail(email);
     if (!user) {
       return res.status(401).json({ error: "Invalid email or password" });
@@ -72,6 +75,7 @@ export async function loginUser(req, res, next) {
       { expiresIn: "2h" }
     );
 
+    //Lähetetään token ja käyttäjätiedot
     res.json({
       message: "Login successful",
       token,
