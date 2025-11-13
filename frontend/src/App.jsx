@@ -1,22 +1,27 @@
-import NewReleases from "./components/newReleases";
-import SearchBar from "./components/searchBar";
-import "./App.css";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Login from "./components/login.jsx";
+import Register from "./components/register.jsx"
+//import HomePage from "./components/homePage.jsx"
 
 function App() {
-
   return (
-    <div>
-    <div style={{ maxWidth: 600, margin: "2rem auto", fontFamily: "sans-serif" }}>
-      <header>
-      <h1>jotain</h1>
-      <SearchBar />
-      </header>
-    </div>
-  <div>
-      <h2>New Releases</h2>
-      <NewReleases />
-  </div>
-  )
-}
+    <Router>
+      <Routes>
+
+        {/* Etusivu Tähän myöhemmin: <Route path="/" element={<HomePage />} /> */}
+        <Route path="/" element={<Login />} />
+
+        {/* Login */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Register */}
+        <Route path="/register" element={<Register />} />
+
+      </Routes>
+    </Router>
+  ) 
+  }
 
 export default App;
