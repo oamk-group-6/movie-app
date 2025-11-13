@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function SearchBar() {
     return (
         <div className="search-bar-container">
@@ -14,9 +16,7 @@ export default function SearchBar() {
                     <input type="text" placeholder="Search..." />
                 </div>
             </div>
-            <Link to={authenticationMode === AuthenticationMode.SignIn ? '/signup' : '/signin'}>
-                {authenticationMode === AuthenticationMode.SignIn ? 'No account? Sign up' : 'Already signed up? Sign in'}
-            </Link>
+            //Sign in juttu
         </div>
     );
 }

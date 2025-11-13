@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import SearchBar from "./components/searchBar";
+import "./App.css";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -24,30 +26,10 @@ function App() {
 
   return (
     <div style={{ maxWidth: 600, margin: "2rem auto", fontFamily: "sans-serif" }}>
-      <h1>Minun Kirjat tietokannassa</h1>
-      {books.length === 0 ? (
-        <p>Ei kirjoja löytynyt.</p>
-      ) : (
-        <table border="1">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Author</th>
-              <th>ISBN</th>
-            </tr>
-          </thead>
-          <tbody>
-            {books.map((book) => (
-              <tr key={book.id}>
-                <td>{book.name}</td>
-                <td>{book.author}</td>
-                <td>{book.isbn}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-      )}
+      <header>
+      <h1>jotain</h1>
+      <SearchBar />
+      </header>
     </div>
   );
 }
