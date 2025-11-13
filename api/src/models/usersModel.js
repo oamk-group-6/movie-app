@@ -1,16 +1,29 @@
 import pool from "../database.js";
 import bcrypt from "bcrypt";
 
+
+//Hae kaikki käyttäjät tietokannasta
 export async function getAllUsers() {
   const result = await pool.query("SELECT id, username, email, avatar_url, bio, created_at FROM users");
   return result.rows;
 }
 
+//Hae käyttäjä ID:llä tietokannasta
 export async function getUserById(id) {
   const result = await pool.query("SELECT id, username, email, avatar_url, bio, created_at FROM users WHERE id=$1", [id]);
   return result.rows[0] || null;
 }
 
+//Hae käyttäjä sähköpostilla tietokannasta
+export async function getUserByEmail(email) {
+  const result = await pool.query(
+    "SELECT * FROM users WHERE email = $1",
+    [email]
+  );
+  return result.rows[0] || null;
+}
+
+//Lisää uusi käyttäjä tietokantaan
 export async function addUser(user) {
   const hash = await bcrypt.hash(user.password, 10);
   const query = `
@@ -20,9 +33,15 @@ export async function addUser(user) {
   `;
   const values = [user.username, user.email, hash, user.avatar_url, user.bio];
   const result = await pool.query(query, values);
+
+  if (result.rows.length === 0) {
+    throw new Error("User insertion returned no rows");
+  }
+
   return result.rows[0];
 }
 
+//Päivitä käyttäjä tietokannassa
 export async function updateUser(id, user) {
   const query = `
     UPDATE users
@@ -35,6 +54,7 @@ export async function updateUser(id, user) {
   return result.rows[0];
 }
 
+//Poista käyttäjä tietokannasta
 export async function deleteUser(id) {
   const result = await pool.query("DELETE FROM users WHERE id=$1 RETURNING *", [id]);
   return result.rows[0];

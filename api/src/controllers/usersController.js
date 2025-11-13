@@ -1,5 +1,7 @@
 import * as usersModel from "../models/usersModel.js";
 
+
+//Hae kaikki käyttäjät
 export const getUsers = async (req, res) => {
   try {
     const users = await usersModel.getAllUsers();
@@ -10,6 +12,7 @@ export const getUsers = async (req, res) => {
   }
 };
 
+//Hae käyttäjä ID:llä
 export const getUserById = async (req, res) => {
   try {
     const user = await usersModel.getUserById(req.params.id);
@@ -21,16 +24,19 @@ export const getUserById = async (req, res) => {
   }
 };
 
+//Luo uusi käyttäjä
 export const createUser = async (req, res) => {
   try {
     const newUser = await usersModel.addUser(req.body);
+    console.log("addUser returned: ", newUser);
     res.status(201).json(newUser);
   } catch (err) {
-    console.error(err);
+    console.error("Detailed error: ",err);
     res.status(500).json({ error: "Database error" });
   }
 };
 
+//Päivitä käyttäjä
 export const updateUser = async (req, res) => {
   try {
     const updatedUser = await usersModel.updateUser(req.params.id, req.body);
@@ -42,6 +48,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
+//Poista käyttäjä
 export const deleteUser = async (req, res) => {
   try {
     const deletedUser = await usersModel.deleteUser(req.params.id);
