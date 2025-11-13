@@ -5,7 +5,6 @@ import moviesRouter from "./routers/movies.js";
 import usersRouter from "./routers/users.js";
 import authRouter from "./routers/authRouter.js";
 
-import bookRouter from "./routers/book_router.js";
 import groupsRouter from "./routers/groups.js"
 import listsRouter from "./routers/lists.js"
 import commetnsRouter from "./routers/comments.js"
@@ -22,7 +21,6 @@ app.get("/", async (req, res) => {
   res.send("Postgres API esimerkki");
 });
 
-app.use("/book", bookRouter);
 app.use("/movies", moviesRouter);
 app.use("/users", usersRouter);
 app.use("/groups", groupsRouter);
