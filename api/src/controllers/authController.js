@@ -18,7 +18,7 @@ export async function registerUser(req, res, next) {
       return res.status(400).json({ error: "Email is already registered" });
     }
 
-    //Hashataan salasana
+    //Hashataan salasana, ehkä turha rivi?? usersModelin addUser tekee hashin??
     const hash = await bcrypt.hash(password, 10);
 
     //addUser odottaa user-objektia
