@@ -9,9 +9,9 @@ function App() {
   return (
     <Router>
       <Routes>
-
-        {/* Etusivu Tähän myöhemmin: <Route path="/" element={<HomePage />} /> */}
-        <Route path="/" element={<Login />} />
+        
+        {/* HomePage */}
+        <Route path="/" element={<HomePage />} />
 
         {/* Login */}
         <Route path="/login" element={<Login />} />

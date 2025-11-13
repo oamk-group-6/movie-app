@@ -1,14 +1,19 @@
-.new-releases-container {
+.hot-now-container {
   display: flex;
-  gap: 48px;
+  gap: 70px;
   overflow-x: auto;
   padding-top: 8px;
   padding-bottom: 16px;
   
 }
 
-.movie-card {
-  width: 150px;
+.new-releases-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.hot-movie-card {
+  width: 300px;
   flex-shrink: 0;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -18,16 +23,16 @@
   transition: transform 0.2s;
 }
 
-.movie-card:hover {
+.hot-movie-card:hover {
   transform: scale(1.05);
 }
 
-.movie-card img {
+.hot-movie-card img {
   width: 100%;
   border-radius: 4px;
 }
 
-.movie-card h4 {
+.hot-movie-card h4 {
   font-size: 14px;
   margin-top: 8px;
   word-break: break-word;
