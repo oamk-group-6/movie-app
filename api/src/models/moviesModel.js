@@ -1,7 +1,30 @@
 import pool from "../database.js";
 
-export async function getAllMovies() {
-  const result = await pool.query("SELECT * FROM movies ORDER BY release_year DESC");
+
+export async function getAllMovies(filters = {}) {
+  const { genre, year, limit = 50, offset = 0 } = filters;
+  const params = [];
+  let query = "SELECT * FROM movies";
+  const conditions = [];
+
+  if (genre) {
+    conditions.push(`genre ILIKE $${params.length + 1}`);
+    params.push(`%${genre}%`);
+  }
+
+  if (year) {
+    conditions.push(`release_year = $${params.length + 1}`);
+    params.push(year);
+  }
+
+  if (conditions.length > 0) {
+    query += " WHERE " + conditions.join(" AND ");
+  }
+
+  query += ` ORDER BY release_year DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+  params.push(limit, offset);
+
+  const result = await pool.query(query, params);
   return result.rows;
 }
 
@@ -50,6 +73,24 @@ export async function updateMovie(id, movie) {
     id
   ];
   const result = await pool.query(query, values);
+  return result.rows[0];
+}
+
+export async function patchMovie(id, fields) {
+  const keys = Object.keys(fields);
+  if (keys.length === 0) return null;
+
+  const setClauses = keys.map((key, i) => `${key} = $${i + 1}`).join(", ");
+  const values = Object.values(fields);
+
+  const query = `
+    UPDATE movies
+    SET ${setClauses}
+    WHERE id = $${keys.length + 1}
+    RETURNING *
+  `;
+
+  const result = await pool.query(query, [...values, id]);
   return result.rows[0];
 }
 

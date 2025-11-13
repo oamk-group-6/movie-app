@@ -6,6 +6,9 @@ import usersRouter from "./routers/users.js";
 import authRouter from "./routers/authRouter.js";
 
 import bookRouter from "./routers/book_router.js";
+import groupsRouter from "./routers/groups.js"
+import listsRouter from "./routers/lists.js"
+import commetnsRouter from "./routers/comments.js"
 
 
 const app = express();
@@ -20,8 +23,11 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/book", bookRouter);
-app.use("/movies", moviesRouter)
+app.use("/movies", moviesRouter);
 app.use("/users", usersRouter);
+app.use("/groups", groupsRouter);
+app.use("/lists", listsRouter);
+app.use("/comments", commetnsRouter);
 app.use("/auth", authRouter);
 
 app.listen(port, () => {
