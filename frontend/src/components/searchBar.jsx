@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import "./searchBar.css" 
 
 export default function SearchBar() {
     return (

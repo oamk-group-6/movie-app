@@ -1,22 +1,16 @@
-import NewReleases from "./components/newReleases";
-import SearchBar from "./components/searchBar";
-import "./App.css";
+import HomePage from "./components/homePage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+//import "./App.css";
 
 function App() {
-
   return (
-    <div>
-    <div style={{ maxWidth: 600, margin: "2rem auto", fontFamily: "sans-serif" }}>
-      <header>
-      <h1>jotain</h1>
-      <SearchBar />
-      </header>
-    </div>
-  <div>
-      <h2>New Releases</h2>
-      <NewReleases />
-  </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        {/* muut reitit */}
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
