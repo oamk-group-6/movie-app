@@ -2,27 +2,40 @@ import React, {useState} from "react";
 import "./register.css";
 import SearchBar from "./searchBar.jsx";
 
+const API_URL = process.env.REACT_APP_API_URL
+
 export default function Register() {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false)
+    const [error, setError] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         //Lähetä backendille
-        fetch("/api/register", {
+        fetch(`${API_URL}/auth/register`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({username ,email, password}),
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log("Register response: ", data);
+        .then(async (res) => {
+            console.log("STATUS:", res.status);
+            const data = await res.json();
+
+            if (!res.ok) {
+                setError(data.error || "Registration failed");
+                return;
+            }
+
+            // Rekisteröinti onnistui
+            console.log("Register response:", data);
+            window.location.href = "/login";
         })
         .catch(err => {
             console.error("Register error:", err);
+            setError("Server error. Try again later.");
         });
     }
 
@@ -40,7 +53,7 @@ export default function Register() {
                     {/* Username label */}
                     <label className="register-label">Username</label>
                     <div className="input-wrapper">
-                        <span className="input-icon"><i class="fa-solid fa-user"></i></span>
+                        <span className="input-icon"><i className="fa-solid fa-user"></i></span>
                         <input
                             type="text"
                             className="register-input"
@@ -54,7 +67,7 @@ export default function Register() {
                     {/* Email label */}
                     <label className="register-label">Email address</label>
                     <div className="input-wrapper">
-                        <span className="input-icon"><i class="fa-regular fa-envelope"></i></span>
+                        <span className="input-icon"><i className="fa-regular fa-envelope"></i></span>
                         <input
                             type="email"
                             className="register-input"
@@ -68,7 +81,7 @@ export default function Register() {
                     {/* Password label */}
                     <label className="register-label">Password</label>
                     <div className="password-wrapper">
-                        <span className="input-icon"><i class="fa-solid fa-lock"></i></span>
+                        <span className="input-icon"><i className="fa-solid fa-lock"></i></span>
                         <input
                             type={showPassword ? "text" : "password"}
                             className="register-input"
@@ -82,7 +95,7 @@ export default function Register() {
                             onClick={() => setShowPassword(!showPassword)}
                         >
                             {showPassword ? (
-                                <i className="fa-solid fa-eye-slash"></i>) : (<i class="fa-regular fa-eye"></i>)}
+                                <i className="fa-solid fa-eye-slash"></i>) : (<i className="fa-regular fa-eye"></i>)}
                         </span>
                     </div>
 
