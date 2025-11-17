@@ -1,5 +1,8 @@
 import React, {useState} from "react";
-//import "./login.css";
+import "./login.css";
+import SearchBar from "./searchBar.jsx";
+
+
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -26,6 +29,9 @@ export default function Login() {
 
     return (
         <div className="login-page">
+            <header>
+                <SearchBar />
+            </header>
             <div className="login-card">
                 <h2 className="login-title">Sign in</h2>
                 <p>Log in by entering your email address and password.</p>
@@ -35,7 +41,7 @@ export default function Login() {
                     {/* Email label */}
                     <label className="login-label">Email address</label>
                     <div className="input-wrapper">
-                        <span className="input-icon">📧</span>
+                        <span className="input-icon"><i class="fa-regular fa-envelope"></i></span>
                         <input
                             type="email"
                             className="login-input"
@@ -49,7 +55,7 @@ export default function Login() {
                     {/* Password label */}
                     <label className="login-label">Password</label>
                     <div className="password-wrapper">
-                        <span className="input-icon">🔒</span>
+                        <span className="input-icon"><i class="fa-solid fa-lock"></i></span>
                         <input
                             type={showPassword ? "text" : "password"}
                             className="login-input"
@@ -62,7 +68,8 @@ export default function Login() {
                             className="password-eye"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? "🙈" : "👁️"}
+                            {showPassword ? (
+                                <i className="fa-solid fa-eye-slash"></i>) : (<i class="fa-regular fa-eye"></i>)}
                         </span>
                     </div>
 

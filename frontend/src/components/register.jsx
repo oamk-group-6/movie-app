@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-//import "./register.css";
+import "./register.css";
+import SearchBar from "./searchBar.jsx";
 
 export default function Register() {
     const [username, setUsername] = useState("")
@@ -27,6 +28,10 @@ export default function Register() {
 
     return (
         <div className="register-page">
+            <header>
+                <SearchBar />
+            </header>
+
             <div className="register-card">
                 <h2 className="register-title">Create Your Account</h2>
                 
@@ -35,7 +40,7 @@ export default function Register() {
                     {/* Username label */}
                     <label className="register-label">Username</label>
                     <div className="input-wrapper">
-                        <span className="input-icon">👤</span>
+                        <span className="input-icon"><i class="fa-solid fa-user"></i></span>
                         <input
                             type="text"
                             className="register-input"
@@ -49,7 +54,7 @@ export default function Register() {
                     {/* Email label */}
                     <label className="register-label">Email address</label>
                     <div className="input-wrapper">
-                        <span className="input-icon">📧</span>
+                        <span className="input-icon"><i class="fa-regular fa-envelope"></i></span>
                         <input
                             type="email"
                             className="register-input"
@@ -63,7 +68,7 @@ export default function Register() {
                     {/* Password label */}
                     <label className="register-label">Password</label>
                     <div className="password-wrapper">
-                        <span className="input-icon">🔒</span>
+                        <span className="input-icon"><i class="fa-solid fa-lock"></i></span>
                         <input
                             type={showPassword ? "text" : "password"}
                             className="register-input"
@@ -76,7 +81,8 @@ export default function Register() {
                             className="password-eye"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? "🙈" : "👁️"}
+                            {showPassword ? (
+                                <i className="fa-solid fa-eye-slash"></i>) : (<i class="fa-regular fa-eye"></i>)}
                         </span>
                     </div>
 
