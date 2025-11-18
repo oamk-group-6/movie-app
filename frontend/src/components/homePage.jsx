@@ -1,10 +1,11 @@
 import HotNow from "./hotNow";
 import NewReleases from "./newReleases";
 import SearchBar from "./searchBar";
+import "./homePage.css"
 
 export default function HomePage() {
   return (
-    <div>
+    <div className="home">
 
       <header style={{ maxWidth: 600, margin: "0 auto 2rem auto", textAlign: "center" }}>
         <h1>Jotain</h1>
