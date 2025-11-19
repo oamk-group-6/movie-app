@@ -81,11 +81,19 @@ export const patchUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const deletedUser = await usersModel.deleteUser(req.params.id);
+    const targetId = req.params.id
+    const userId = req.user.userId
+
+    if(Number(targetId) !== Number(userId)) {
+      return res.status(403).json({ error: "You can only delete your own account" })
+    }
+
+    const deletedUser = await usersModel.deleteUser(targetId);
+    
     if (!deletedUser) return res.status(404).json({ error: "User not found" });
     res.json({ message: "User deleted", user: deletedUser });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Database error" });
+    res.status(500).json({ error: "Database error:" });
   }
 };

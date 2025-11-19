@@ -18,6 +18,6 @@ router.post("/", createUser);   // for admin, not for registration
 router.put("/:id", updateUser);
 router.patch("/:id", patchUser);
 router.patch("/:id/password", changePassword);
-router.delete("/:id", deleteUser);
+router.delete("/:id", auth, deleteUser);
 
 export default router;
