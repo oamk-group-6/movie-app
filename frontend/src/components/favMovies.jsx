@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom"
 import "./favMovies.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -78,8 +79,9 @@ export default function FavMovies({ userId, title = "Favourites" }) {
 
       <div className="fav-movies-container">
         {movies.map(movie => (
-          <div
-            key={movie.external_id}
+          <Link
+            to={`/movies/${movie.id}`}
+            key={movie.id}
             className="fav-movie-card"
             onContextMenu={(e) => handleContextMenu(e, movie.external_id)}
           >
@@ -106,7 +108,7 @@ export default function FavMovies({ userId, title = "Favourites" }) {
                 </div>
               )}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
