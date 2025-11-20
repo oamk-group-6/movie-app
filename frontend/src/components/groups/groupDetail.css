@@ -1,0 +1,50 @@
+.group-details-page{
+    padding-top: 100px;
+    min-height: 100vh;    
+    background: black;
+    color: white;    
+}
+
+.group-details-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 30px;
+}
+
+.group-left, .group-center, .group-right{
+    background: #58330A;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.group-left h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+}
+
+.group-left h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.group-avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #777;
+}
+
+.member-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.member-list li {
+    margin: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
