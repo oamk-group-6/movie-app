@@ -1,0 +1,123 @@
+.fav-movies-wrapper {
+  padding: 10px;
+  color: #000;
+}
+
+.fav-movies-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 korttia per rivi */
+  gap: 10px;
+  justify-content: center;
+  padding: 10px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.fav-movie-card {
+  background-color: #FFD700;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  height: 500px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fav-movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.fav-movie-card img {
+  width: 100%; /* säilyttää pienen keltaisen reunan */
+  border-radius: 8px;
+}
+
+.fav-movie-card h4 {
+  font-size: 1rem;
+  margin: 4px 0 2px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.fav-movie-card p {
+  font-size: 0.85rem;
+  margin: 2px 0;
+}
+
+/* Alaosa: käyttäjän arvosana + Bananameter */
+.movie-footer {
+  margin-top: auto; /* työntää footerin alas */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.movie-user-rating {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+}
+
+/* Bananameter */
+.movie-average-bar {
+  width: 70%;
+  height: 25px;
+  background-color: #8B4513;
+  border: 2px solid #8B4513;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.movie-average-fill {
+  height: 100%;
+  background-color: #FFD700;
+  border-radius: 3px 0 0 3px;
+  transition: width 0.3s ease;
+}
+
+.movie-average-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #000;
+  white-space: nowrap;
+}
+
+/* Context menu */
+.context-menu {
+  position: fixed;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  width: 150px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.context-menu-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.context-menu-item:hover {
+  background-color: #eee;
+}
+.fav-movies-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: #ffffff; /* tai haluamasi väri */
+}
