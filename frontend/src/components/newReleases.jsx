@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
-import "./newReleases.css";
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+
+import "./newReleases.css"
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -25,7 +27,11 @@ export default function NewReleases() {
     <div>
       <div className="new-releases-container">
         {movies.map(movie => (
-          <div key={movie.external_id} className="movie-card">
+          <Link
+            to={`/movies/${movie.id}`}
+            key={movie.id}
+            className="movie-card"
+          >
             <img src={movie.poster_url} alt="Movie Poster" />
 
             {/* Bananameter */}
@@ -38,7 +44,7 @@ export default function NewReleases() {
                 Bananameter: {movie.rating_avg}%
               </span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
