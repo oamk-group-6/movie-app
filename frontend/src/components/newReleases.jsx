@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+
 import "./newReleases.css"
 
 const API_URL = process.env.REACT_APP_API_URL
@@ -22,10 +24,14 @@ export default function NewReleases() {
     <div>
       <div className="new-releases-container">
         {movies.map(movie => (
-          <div key={movie.external_id} className="movie-card">
+          <Link
+            to={`/movies/${movie.id}`}
+            key={movie.id}
+            className="movie-card"
+          >
             <img src={movie.poster_url} alt={movie.title} />
             <h4>{movie.title}</h4>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
