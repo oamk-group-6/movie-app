@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom"
+
 import "./hotNow.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -26,7 +28,11 @@ export default function HotNow() {
       <div className="new-releases-wrapper">
         <div className="hot-now-container">
           {movies.map(movie => (
-            <div key={movie.external_id} className="hot-movie-card">
+            <Link
+            to={`/movies/${movie.id}`}
+            key={movie.id}
+            className="hot-movie-card"
+            >
               <img src={movie.poster_url} alt="Movie Poster" />
               {/* Bananameter */}
               <div className="movie-average-bar">
@@ -38,7 +44,7 @@ export default function HotNow() {
                   Bananameter: {movie.rating_avg}%
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -25,6 +25,8 @@
   box-sizing: border-box;
   margin: 0 auto;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  color: inherit; 
 }
 
 .fav-movie-card:hover {
