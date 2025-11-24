@@ -30,10 +30,12 @@ export const createGroup = async (req, res) => {
       return res.status(401).json({ error: "User authentication failed" });
     }
 
+    const avatarUrl = req.file ? `/uploads/${req.file.filename}` : `/uploads/group_placeholder.png`;
+
     const newGroup = await groupsModel.addGroup({
       name: req.body.name,
       description: req.body.description,
-      avatar_url: req.body.avatar_url,
+      avatar_url: avatarUrl,
       owner_id: ownerId
     });
 

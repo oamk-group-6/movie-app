@@ -1,0 +1,39 @@
+.view-group-btn{
+    background: #AA671D;
+    color: #F4EB49;
+    border-radius: 10px;
+    height: 25px;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-group-btn:hover{
+    background: #AA671D;
+    border-color: #F4EB49;    
+    box-shadow: 0 0 0 2px #F4EB49 inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 5px;
+}
+
+.my-groups-section{
+    display: flex;
+    flex-direction: column;
+}
+
+.my-group-card{
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.groups-avatar{
+    width: 150px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #777;
+}

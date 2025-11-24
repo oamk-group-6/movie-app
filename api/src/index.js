@@ -29,6 +29,8 @@ app.use("/comments", commetnsRouter);
 app.use("/auth", authRouter);
 app.use("/lists-movies", listMoviesRouter);
 
+app.use("/uploads", express.static("uploads"));
+
 app.listen(port, () => {
   console.log(`Server is listening port ${port}`);
 });

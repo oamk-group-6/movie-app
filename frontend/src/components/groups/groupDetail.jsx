@@ -59,6 +59,9 @@ export default function GroupDetails() {
 
     //Leave group for non-owners
     const handleLeaveGroup = () => {
+        const confirmDelete = window.confirm("Are you sure you want to leave this group?");
+        if (!confirmDelete) return;
+
         fetch(`${API_URL}/groups/${id}/leave`, {
             method: "POST",
             headers: {
@@ -73,6 +76,9 @@ export default function GroupDetails() {
 
     //Delete group for owners
     const handleDeleteGroup = () => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this group?");
+        if (!confirmDelete) return;
+
         fetch(`${API_URL}/groups/${id}`, {
             method: "DELETE",
             headers: {
@@ -87,6 +93,9 @@ export default function GroupDetails() {
 
     //Remove member for owners
     const handleRemoveMember = (userId) => {
+        const confirmDelete = window.confirm("Are you sure you want to remove this member?");
+        if (!confirmDelete) return;
+
         fetch(`${API_URL}/groups/${id}/members/${userId}`, {
             method: "DELETE",
             headers: {
@@ -115,13 +124,20 @@ export default function GroupDetails() {
             <header>
                 <SearchBar />
             </header>
+            <div className="group-details-header">
+                <i
+                    className="fa-solid fa-arrow-left"
+                    onClick={() => navigate(-1)}
+                />
+            </div>
+            
             <div className="group-details-content">    
                 {/* LEFT COLUMN */}
                 <div className="group-left">
                     <h2>{group.name}</h2>
 
                     <img 
-                    src={group.avatar_url} 
+                    src={`${API_URL}${group.avatar_url}`} 
                     alt="Group Avatar" 
                     className="group-avatar"
                     />

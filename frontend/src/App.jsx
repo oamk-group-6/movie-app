@@ -1,8 +1,8 @@
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Login from "./components/login.jsx";
-import Register from "./components/register.jsx"
+import Login from "./components/login/login.jsx";
+import Register from "./components/register/register.jsx"
 import HomePage from "./components/homePage.jsx"
 import GroupsPage from "./components/groups/groupsPage.jsx";
 import CreateGroupPage from "./components/groups/createGroupPage.jsx";

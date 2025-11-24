@@ -19,15 +19,26 @@ import {
 } from "../controllers/groupsController.js";
 import * as membersController from "../controllers/groupMembersController.js";
 import { auth } from "../middleware/auth.js";
-
-import { auth } from "../middleware/auth.js";
+import multer from "multer";
 
 
 const router = express.Router();
 
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename(req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  }
+});
+const upload = multer({ storage });
+
+
 router.get("/", getGroups);
 router.get("/:id", getGroupById);
-router.post("/", auth, createGroup);
+router.post("/", auth, upload.single("avatar"), createGroup);
 router.put("/:id", updateGroup);
 router.patch("/:id", patchGroup);
 router.delete("/:id", deleteGroup);

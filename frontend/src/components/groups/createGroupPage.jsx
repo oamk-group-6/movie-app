@@ -1,25 +1,38 @@
 import {useState} from "react";
 import { useNavigate } from "react-router-dom";
 
+import "./createGroupPage.css";
+
 const API_URL = process.env.REACT_APP_API_URL;
 
 export default function CreateGroupPage() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [avatar, setAvatar] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [preview, setPreview] = useState("");
 
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-    function authorizedHeader() {
-        const token = localStorage.getItem("token");
-        if (!token) return {};
-        return { Authorization: `Bearer ${token}` };
+  function authorizedHeader() {
+      const token = localStorage.getItem("token");
+      if (!token) return {};
+      return { Authorization: `Bearer ${token}` };
+  }
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    setAvatar(file);
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreview(url);
     }
+  };
 
-    const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!name.trim()) {
@@ -27,17 +40,19 @@ export default function CreateGroupPage() {
         return;
     }
 
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    if (avatar) {
+      formData.append("avatar", avatar);
+    }
+
     fetch(`${API_URL}/groups`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         ...authorizedHeader(),
       },
-      body: JSON.stringify({
-        name,
-        description,
-        avatar_url: avatar,
-      }),
+      body: formData,
     })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to create group.");
@@ -56,8 +71,8 @@ export default function CreateGroupPage() {
   };
 
 
-    return (
-        <div>
+  return (
+    <div>
             <h2>Create a New Group</h2>
             
             <form onSubmit={handleSubmit} className="create-group-form">
@@ -78,12 +93,12 @@ export default function CreateGroupPage() {
                     onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
 
-                <label>Avatar URL</label>
+                <label>Avatar</label>
                 <input
-                    type="text"
+                    type="file"
+                    accept="image/*"
                     className="group-input"
-                    value={avatar}
-                    onChange={(e) => setAvatar(e.target.value)}
+                    onChange={(e) => setAvatar(e.target.files[0])}
                 />
 
                 <button type="submit" className="create-group-btn">
@@ -93,6 +108,6 @@ export default function CreateGroupPage() {
                 {error && <p className="error-message">{error}</p>}
                 {success && <p className="success-message">{success}</p>}
             </form>
-        </div>
-    );
+    </div>
+  );
 }

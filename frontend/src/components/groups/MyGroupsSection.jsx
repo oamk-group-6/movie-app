@@ -1,4 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import "./MyGroupsSection.css";
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function MyGroupsSection({ groups, loggedIn }) {
     const navigate = useNavigate();
@@ -23,9 +26,9 @@ export default function MyGroupsSection({ groups, loggedIn }) {
             {groups.map(group => (
                 <div className="my-group-card" key={group.id}>
                     <img
-                        src={group.avatar_url}
+                        src={`${API_URL}${group.avatar_url}`}
                         alt={`${group.name} Avatar`}
-                        className="group-avatar"
+                        className="groups-avatar"
                     />
 
                     <div className="group-info">
