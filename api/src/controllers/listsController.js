@@ -85,3 +85,24 @@ export const deleteList = async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 };
+
+export const getSharedList = async (req, res) => {
+  try {
+    const shareId = req.params.share_id;
+
+    const list = await listsModel.getListByShareId(shareId);
+
+     if (!list) {
+      return res.status(404).json({ error: "Shared list not found" });
+    }
+
+    if (!list.is_public) {
+      return res.status(403).json({ error: "This list is not public" });
+    }
+
+    res.json(list);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error"});
+  }
+};

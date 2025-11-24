@@ -5,8 +5,8 @@ export const rateMovie = async (req, res) => {
         const userId = req.user.id;
         const { movieId, rating, review } = req.body;
 
-        if (rating < 0 || rating > 10) {
-            return res.status(400).json({ error: "Rating must be between 0 and 10" });
+        if (rating < 0 || rating > 5) {
+            return res.status(400).json({ error: "Rating must be between 0 and 5" });
         }
 
         const userRating = await ratingsModel.upsertRating(userId, movieId, rating, review);
@@ -42,5 +42,22 @@ export const deleteUserRating = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({error: "Database error"});
+    }
+};
+
+export const getMovieRatings = async (req, res) => {
+    try {
+        const { movieId } = req.params;
+
+        const ratings = await ratingsModel.getRatingsForMovie(movieId);
+
+        res.json({
+            movieId,
+            count: ratings.length,
+            ratings
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Database error" });
     }
 };

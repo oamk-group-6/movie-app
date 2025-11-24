@@ -4,10 +4,10 @@ import "dotenv/config";
 import moviesRouter from "./routers/movies.js";
 import usersRouter from "./routers/users.js";
 import authRouter from "./routers/authRouter.js";
-
-import groupsRouter from "./routers/groups.js"
-import listsRouter from "./routers/lists.js"
-import commetnsRouter from "./routers/comments.js"
+import groupsRouter from "./routers/groups.js";
+import listsRouter from "./routers/lists.js";
+import commetnsRouter from "./routers/comments.js";
+import listMoviesRouter from "./routers/listMovies.js";
 
 
 const app = express();
@@ -27,6 +27,7 @@ app.use("/groups", groupsRouter);
 app.use("/lists", listsRouter);
 app.use("/comments", commetnsRouter);
 app.use("/auth", authRouter);
+app.use("/lists-movies", listMoviesRouter);
 
 app.listen(port, () => {
   console.log(`Server is listening port ${port}`);

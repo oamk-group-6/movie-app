@@ -8,6 +8,9 @@ import GroupsPage from "./components/groups/groupsPage.jsx";
 import CreateGroupPage from "./components/groups/createGroupPage.jsx";
 import GroupDetails from "./components/groups/groupDetail.jsx";
 
+import UserPage from "./components/userPage.jsx";
+import MovieDetail from "./components/movieDetail.jsx"
+
 
 function App() {
   return (
@@ -31,6 +34,12 @@ function App() {
 
         {/* Group Details */}
         <Route path="/groups/:id" element={<GroupDetails />} />
+
+
+        {/**User page */}
+        <Route path="/userpage" element={<UserPage />} />
+        {/* Movie Details */}
+        <Route path="/movies/:id" element={<MovieDetail />} />
 
 
       </Routes>
