@@ -1,4 +1,4 @@
-.register-page{
+.login-page{
     background: black;
     display: flex;
     justify-content: center;
@@ -8,30 +8,29 @@
     font-family: 'Source Sans 3';
 }
 
-.register-card{
+.login-card{
     background: #AA671D;
     padding: 2rem 2.5rem;
     border-radius: 20px;
     color: #F4EB49;
     width: 320px;
-    height: 480px;
 }
 
-.register-title{
+.login-title{
     font-size: 2rem;
     margin-bottom: 0.5rem;
     font-weight: bold;
     font-family: 'Montserrat';
 }
 
-.register-card p {
+.login-card p {
   font-size: 1rem;
   margin-bottom: 1.5rem;
   line-height: 1.5rem;
   color: #F4EB49;
 }
 
-.register-label{
+.login-label{
     font-size: 1rem;
     color: #F4EB49;
     display: block;
@@ -55,7 +54,7 @@
     font-size: 1rem;
 }
 
-.register-input{
+.login-input{
     flex: 1;
     outline: none;
     background: transparent;
@@ -65,9 +64,9 @@
     border: none;
 }
 
-.register-input::placeholder{
-    color: #58330A;   
-    opacity: 1;
+.login-input::placeholder {
+  color: #58330A;   
+  opacity: 1;       
 }
 
 .password-eye{
@@ -76,7 +75,19 @@
     color: #F4EB49;
 }
 
-.register-btn{
+.forgot-password{
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    text-decoration: underline;
+    color: #F4EB49;
+}
+.forgot-password:hover {
+    color: #58330A;
+    transition: color 0.3s ease;
+}
+
+.login-btn{
     width: 100%;
     background: #58330A;
     color: #F4EB49;
@@ -84,27 +95,28 @@
     height: 50px;
     cursor: pointer;
 }
-
-.register-btn:hover {   
-  border-color: #F4EB49;    
-  box-shadow: 0 0 0 2px #F4EB49 inset;
-  transition: all 0.25s ease;
+.login-btn:hover{
+    background: #58330A;
+    border-color: #F4EB49;    
+    box-shadow: 0 0 0 2px #F4EB49 inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 5px;
 }
 
-.login-text{
+.signup-text{
     margin-top: 1.5rem;
     font-size: 1rem;
     color: #F4EB49;
     text-align: center;
 }
-.login-link{
+.signup-link{
     margin-top: 1.5rem;
     font-size: 1rem;
     text-decoration: underline;
     color: #F4EB49;
     cursor: pointer;
 }
-.login-link:hover {
+.signup-link:hover {
     color: #58330A;
     transition: color 0.3s ease;
 }

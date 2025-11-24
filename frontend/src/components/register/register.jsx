@@ -1,58 +1,76 @@
 import React, {useState} from "react";
-import "./login.css";
-import SearchBar from "./searchBar.jsx";
+import "./register.css";
+import SearchBar from "../searchBar.jsx";
 
 const API_URL = process.env.REACT_APP_API_URL
 
-export default function Login() {
+export default function Register() {
+    const [username, setUsername] = useState("")
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
-   
+
         //Lähetä backendille
-        fetch(`${API_URL}/auth/login`, {
+        fetch(`${API_URL}/auth/register`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({email, password}),
+            body: JSON.stringify({username ,email, password}),
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log("Login response:", data);
-            if (data.token) {
-                localStorage.setItem("token", data.token);
-                window.location.href = "/";   // siirry etusivulle
-            } else {
-                setError(data.error || "Invalid email or password");
+        .then(async (res) => {
+            console.log("STATUS:", res.status);
+            const data = await res.json();
+
+            if (!res.ok) {
+                setError(data.error || "Registration failed");
+                return;
             }
+
+            // Rekisteröinti onnistui
+            console.log("Register response:", data);
+            window.location.href = "/login";
         })
         .catch(err => {
-            console.error("Login error:", err);
+            console.error("Register error:", err);
             setError("Server error. Try again later.");
         });
     }
 
     return (
-        <div className="login-page">
+        <div className="register-page">
             <header>
                 <SearchBar />
             </header>
-            <div className="login-card">
-                <h2 className="login-title">Sign in</h2>
-                <p>Log in by entering your email address and password.</p>
 
+            <div className="register-card">
+                <h2 className="register-title">Create Your Account</h2>
+                
                 <form onSubmit={handleSubmit}>
 
+                    {/* Username label */}
+                    <label className="register-label">Username</label>
+                    <div className="input-wrapper">
+                        <span className="input-icon"><i className="fa-solid fa-user"></i></span>
+                        <input
+                            type="text"
+                            className="register-input"
+                            placeholder="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </div>
+
                     {/* Email label */}
-                    <label className="login-label">Email address</label>
+                    <label className="register-label">Email address</label>
                     <div className="input-wrapper">
                         <span className="input-icon"><i className="fa-regular fa-envelope"></i></span>
                         <input
                             type="email"
-                            className="login-input"
+                            className="register-input"
                             placeholder="email@address.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -61,12 +79,12 @@ export default function Login() {
                     </div>
 
                     {/* Password label */}
-                    <label className="login-label">Password</label>
+                    <label className="register-label">Password</label>
                     <div className="password-wrapper">
                         <span className="input-icon"><i className="fa-solid fa-lock"></i></span>
                         <input
                             type={showPassword ? "text" : "password"}
-                            className="login-input"
+                            className="register-input"
                             placeholder="••••••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -81,18 +99,15 @@ export default function Login() {
                         </span>
                     </div>
 
-                    <a className="forgot-password" href="/forgot-password">
-                        Forgot password?
-                    </a>
-
-                    {/* Login nappi */}
-                    <button className="login-btn" type="submit">
-                        Log in
+                    
+                    {/* Create account nappi */}
+                    <button className="register-btn" type="submit">
+                        Create Account
                     </button>
 
-                    <p className="signup-text">
-                        Don't have an account? 
-                        <a href="/register" className="signup-link">Sign up here</a>
+                    <p className="login-text">
+                        Already have an account? 
+                        <a href="/login" className="login-link">Log in here</a>
                     </p>
                 </form>
             </div>

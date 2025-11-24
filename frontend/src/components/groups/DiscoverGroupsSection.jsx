@@ -1,3 +1,7 @@
+import './DiscoverGroupsSection.css';
+
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function DiscoverGroupsSection({ groups, loggedIn }){
     
     if (!loggedIn) {
@@ -17,7 +21,7 @@ export default function DiscoverGroupsSection({ groups, loggedIn }){
                 {groups.map(group => (
                     <div className="discover-card" key={group.id}>
                         <img
-                            src={group.avatar_url}
+                            src={`${API_URL}${group.avatar_url}`}
                             alt={`${group.name} Avatar`}
                             className="discover-avatar"
                         />

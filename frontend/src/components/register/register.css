@@ -1,4 +1,4 @@
-.login-page{
+.register-page{
     background: black;
     display: flex;
     justify-content: center;
@@ -8,31 +8,29 @@
     font-family: 'Source Sans 3';
 }
 
-.login-card{
+.register-card{
     background: #AA671D;
     padding: 2rem 2.5rem;
     border-radius: 20px;
     color: #F4EB49;
     width: 320px;
-    height: 480px;
-
 }
 
-.login-title{
+.register-title{
     font-size: 2rem;
     margin-bottom: 0.5rem;
     font-weight: bold;
     font-family: 'Montserrat';
 }
 
-.login-card p {
+.register-card p {
   font-size: 1rem;
   margin-bottom: 1.5rem;
   line-height: 1.5rem;
   color: #F4EB49;
 }
 
-.login-label{
+.register-label{
     font-size: 1rem;
     color: #F4EB49;
     display: block;
@@ -51,12 +49,20 @@
   margin-bottom: 0.8rem;
 }
 
+.input-wrapper:focus-within,
+.password-wrapper:focus-within {
+  border-color: #F4EB49;
+  box-shadow: 0 0 0 2px rgba(244, 235, 73, 0.4);
+  transition: all 0.25s ease;
+}
+
+
 .input-icon{
     margin-right: 8px;
     font-size: 1rem;
 }
 
-.login-input{
+.register-input{
     flex: 1;
     outline: none;
     background: transparent;
@@ -66,9 +72,9 @@
     border: none;
 }
 
-.login-input::placeholder {
-  color: #58330A;   
-  opacity: 1;       
+.register-input::placeholder{
+    color: #58330A;   
+    opacity: 1;
 }
 
 .password-eye{
@@ -77,19 +83,7 @@
     color: #F4EB49;
 }
 
-.forgot-password{
-    display: inline-block;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    text-decoration: underline;
-    color: #F4EB49;
-}
-.forgot-password:hover {
-    color: #58330A;
-    transition: color 0.3s ease;
-}
-
-.login-btn{
+.register-btn{
     width: 100%;
     background: #58330A;
     color: #F4EB49;
@@ -97,26 +91,29 @@
     height: 50px;
     cursor: pointer;
 }
-.login-btn:hover{
+
+.register-btn:hover {
+    background: #58330A;
     border-color: #F4EB49;    
     box-shadow: 0 0 0 2px #F4EB49 inset;
     transition: all 0.25s ease;
+    text-shadow: black 0px 0px 5px;
 }
 
-.signup-text{
+.login-text{
     margin-top: 1.5rem;
     font-size: 1rem;
     color: #F4EB49;
     text-align: center;
 }
-.signup-link{
+.login-link{
     margin-top: 1.5rem;
     font-size: 1rem;
     text-decoration: underline;
     color: #F4EB49;
     cursor: pointer;
 }
-.signup-link:hover {
+.login-link:hover {
     color: #58330A;
     transition: color 0.3s ease;
 }

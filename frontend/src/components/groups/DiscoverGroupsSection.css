@@ -1,0 +1,17 @@
+.discover-groups-section{
+    display: flex;
+    flex-direction: column;
+}
+.discover-card{
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+.discover-avatar{
+    width: 150px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #777;
+}

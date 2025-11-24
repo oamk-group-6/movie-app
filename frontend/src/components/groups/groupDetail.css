@@ -2,13 +2,36 @@
     padding-top: 100px;
     min-height: 100vh;    
     background: black;
-    color: white;    
+    color: white; 
+}
+
+.group-details-header{
+    padding: 20px 20px;
+}
+.group-details-header i{
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #F4EB49;
+    background: #58330A;
+    border: solid 2px #58330A;
+    border-radius: 5px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.group-details-header i:hover{
+    border-color: #F4EB49;    
+    box-shadow: 0 0 0 0.5px #F4EB49 inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 5px;
 }
 
 .group-details-content {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     gap: 30px;
+    color: #F4EB49;
 }
 
 .group-left, .group-center, .group-right{
@@ -17,7 +40,7 @@
     padding: 20px;
 }
 
-.group-left h2 {
+.group-left h2, .group-center h2, .group-right h2 {
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 1.6rem;
@@ -29,8 +52,8 @@
 }
 
 .group-avatar {
-    width: 140px;
-    height: 140px;
+    width: 150px;
+    height: 100px;
     border-radius: 10px;
     object-fit: cover;
     background: #777;

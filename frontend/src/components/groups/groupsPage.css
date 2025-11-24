@@ -39,12 +39,17 @@
     height: 50px;
     width: 150px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .create-group-btn:hover{
+    background: #58330A;
     border-color: #F4EB49;    
     box-shadow: 0 0 0 2px #F4EB49 inset;
     transition: all 0.25s ease;
+    text-shadow: black 0px 0px 5px;
 }
 
 .btn-icon{
@@ -63,19 +68,5 @@
     background: #58330A;
     border-radius: 20px;
     padding: 20px;
-}
-
-.view-group-btn{
-    background: #AA671D;
-    color: #F4EB49;
-    border-radius: 10px;
-    height: 25px;
-    cursor: pointer;
-    border: none;
-}
-
-.view-group-btn:hover{
-    border-color: #F4EB49;    
-    box-shadow: 0 0 0 2px #F4EB49 inset;
-    transition: all 0.25s ease;
+    
 }
