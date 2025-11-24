@@ -1,0 +1,81 @@
+.groups-page {
+    background: black;
+    color: white;
+    min-height: 100vh;
+    padding-top: 100px;
+}
+
+.groups-header{
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.7fr;
+    grid-template-areas: "left center right";
+    padding: 20px 40px;
+    gap: 20px;
+}
+
+.group-search-input {
+    grid-area: center;
+    padding: 10px 14px;
+    border-radius: 20px;
+    border: 5px solid #58330A;
+    outline: none;
+    background: white;  
+}
+
+.group-search-input:focus {
+    border-color: #F4EB49;
+}
+
+.group-search-input::placeholder {
+    color: #58330A;
+}
+
+.create-group-btn{
+    grid-area: right;
+    justify-self: end;
+    background: #58330A;
+    color: #F4EB49;
+    border-radius: 10px;
+    height: 50px;
+    width: 150px;
+    cursor: pointer;
+}
+
+.create-group-btn:hover{
+    border-color: #F4EB49;    
+    box-shadow: 0 0 0 2px #F4EB49 inset;
+    transition: all 0.25s ease;
+}
+
+.btn-icon{
+    margin-right: 4px;
+    font-size: 1rem;
+}
+
+.groups-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.7fr;
+    gap: 30px;
+    padding: 20px 40px;
+}
+
+.groups-left, .groups-center, .groups-right {
+    background: #58330A;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.view-group-btn{
+    background: #AA671D;
+    color: #F4EB49;
+    border-radius: 10px;
+    height: 25px;
+    cursor: pointer;
+    border: none;
+}
+
+.view-group-btn:hover{
+    border-color: #F4EB49;    
+    box-shadow: 0 0 0 2px #F4EB49 inset;
+    transition: all 0.25s ease;
+}

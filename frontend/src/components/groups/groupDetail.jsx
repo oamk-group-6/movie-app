@@ -1,0 +1,194 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import SearchBar from "../searchBar";
+import "./groupDetail.css";
+
+const API_URL = process.env.REACT_APP_API_URL;
+
+export default function GroupDetails() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const [group, setGroup] = useState(null);
+    const [members, setMembers] = useState([]);
+    const [isOwner, setIsOwner] = useState(false);
+    const [comments, setComments] = useState([]);
+
+    function getUserIdFromToken() {
+        const token = localStorage.getItem("token");
+        if (!token) return null;
+
+        try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            return payload.userId;
+        } catch {
+            return null;
+        }
+    }
+
+    const userId = getUserIdFromToken();
+
+    function authorizedHeader() {
+        const token = localStorage.getItem("token");
+        if (!token) return {};
+        return { Authorization: `Bearer ${token}` };
+    }
+
+    useEffect(() => {
+
+        // Fetch group details
+        fetch(`${API_URL}/groups/${id}`, { headers: authorizedHeader() })
+            .then(res => res.json())
+            .then(data => {
+                setGroup(data);
+                if (data.owner_id === userId) {
+                    setIsOwner(true);
+                }
+        });
+
+        // Fetch group members
+        fetch(`${API_URL}/groups/${id}/members`, { headers: authorizedHeader() })
+            .then(res => res.json())
+            .then(data => setMembers(data));
+
+        // Fetch group comments
+        //fetch(`${API_URL}/groups/${id}/comments`)
+        //    .then(res => res.json())
+        //    .then(data => setComments(data));
+    }, [id, userId]);
+
+    //Leave group for non-owners
+    const handleLeaveGroup = () => {
+        fetch(`${API_URL}/groups/${id}/leave`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            ...authorizedHeader()
+        }
+        })
+            .then(res => {
+                if (res.ok) navigate("/groups");
+            });
+    };
+
+    //Delete group for owners
+    const handleDeleteGroup = () => {
+        fetch(`${API_URL}/groups/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            ...authorizedHeader()
+            }
+        })
+            .then(res => {
+                if (res.ok) navigate("/groups");
+        });
+    };
+
+    //Remove member for owners
+    const handleRemoveMember = (userId) => {
+        fetch(`${API_URL}/groups/${id}/members/${userId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                ...authorizedHeader()
+            }
+        })
+            .then(res => res.json())
+            .then(() => {
+                // delete member from display without refresh
+                setGroup(prev => ({
+                    ...prev,
+                    members: prev.members.filter(m => m.id !== userId)
+                }));
+            })
+            .catch(err => console.error("Remove member error:", err));
+    };
+
+
+    if(!group) {
+        return <p>Loading group...</p>;
+    }
+
+    return (
+        <div className="group-details-page">
+            <header>
+                <SearchBar />
+            </header>
+            <div className="group-details-content">    
+                {/* LEFT COLUMN */}
+                <div className="group-left">
+                    <h2>{group.name}</h2>
+
+                    <img 
+                    src={group.avatar_url} 
+                    alt="Group Avatar" 
+                    className="group-avatar"
+                    />
+                    <p>{group.description}</p>
+
+                    <h3>Members</h3>
+
+                    {isOwner && (
+                        <button className="invite-member-btn">Invite member</button>
+                    )}
+
+
+                    <ul className="member-list">
+                        {members.map(m => (
+                        <li key={m.id}>
+                            {m.username} {m.role === "owner" && "(owner)"}
+                            
+                            {isOwner && m.id !== group.owner_id && (
+                                <button 
+                                    className="remove-member-btn"
+                                    onClick={() => handleRemoveMember(m.id)}
+                                ><i className="fa-solid fa-x"></i></button>
+                            )}
+                        </li>
+                        ))}
+                    </ul>
+
+                    
+                    {!isOwner && (
+                        <button className="leave-group-btn" onClick={handleLeaveGroup}>
+                        Leave Group
+                        </button>
+                    )}
+
+                    {isOwner && (
+                        <button className="delete-group-btn" onClick={handleDeleteGroup}>
+                        Delete Group
+                        </button>
+                    )}
+                </div>
+
+                {/* CENTER COLUMN: Favourites */}
+                <div className="group-center">
+                    <h2>Our favourites</h2>
+
+                    <div className="favourites-grid">
+                        <p>Movie cards here</p>    
+                    </div>
+                </div>
+
+                {/* RIGHT COLUMN: Comments */}
+                <div className="group-right">
+                    <h2>Comments</h2>
+
+                    <div className="comments-box">
+                        {comments.length === 0 ? (
+                            <p>No comments yet.</p>
+                        ) : (
+                            comments.map((c, idx) => (
+                                <p key={idx}>
+                                    <strong>{c.username}:</strong> {c.content}
+                                </p>
+                            ))
+                        )}
+                    </div>
+                </div>
+            </div>    
+        </div>
+    );
+}

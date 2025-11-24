@@ -51,6 +51,17 @@ CREATE TABLE "group_members" (
   CONSTRAINT fk_groupmembers_group FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON DELETE CASCADE
 );
 
+-- GROUP INVITATIONS
+CREATE TABLE group_invitations (
+  id SERIAL PRIMARY KEY,
+  group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
+  invited_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  invited_by_user_id INTEGER REFERENCES users(id),
+  status VARCHAR(20) DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- RATINGS
 CREATE TABLE "ratings" (
   "user_id" INTEGER NOT NULL,
