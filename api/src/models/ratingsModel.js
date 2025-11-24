@@ -62,3 +62,24 @@ export async function deleteRating(userId, movieId) {
     [movieId]
     );
 }
+
+export async function getRatingsForMovie(movieId) {
+    const result = await pool.query(
+        `
+        SELECT 
+            r.user_id,
+            u.username,
+            r.rating,
+            r.review,
+            r.created_at,
+            r.updated_at
+        FROM ratings r
+        JOIN users u ON r.user_id = u.id
+        WHERE r.movie_id = $1
+        ORDER BY r.created_at DESC;
+        `,
+        [movieId]
+    );
+
+    return result.rows;
+}

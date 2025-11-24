@@ -114,6 +114,8 @@ CREATE TABLE "comments" (
 );
 
 
+ALTER TABLE lists ADD COLUMN share_id VARCHAR(50) UNIQUE;
+
 
 CREATE INDEX idx_movies_external_id ON movies (external_id);
 CREATE INDEX idx_ratings_user_id ON ratings (user_id);

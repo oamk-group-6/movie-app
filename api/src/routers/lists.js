@@ -5,7 +5,8 @@ import {
   createList, 
   updateList, 
   deleteList,
-  patchList 
+  patchList,
+  getSharedList 
 } from "../controllers/listsController.js";
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.post("/", createList);
 router.put("/:id", updateList);
 router.patch("/:id", patchList);
 router.delete("/:id", deleteList);
+router.get("/share/:share_id", getSharedList);
 
 export default router;
