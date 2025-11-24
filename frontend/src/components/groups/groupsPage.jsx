@@ -88,7 +88,7 @@ export default function GroupsPage() {
         {/* Right column – Invitations */}
         <div className="groups-right">
           <GroupInvitations 
-            invites={isLoggedIn ? invites : null}
+            invites={isLoggedIn ? invites : []}
             loggedIn={isLoggedIn}
           />
         </div>
