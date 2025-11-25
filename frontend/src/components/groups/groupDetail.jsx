@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SearchBar from "../searchBar";
+import InviteMemberModal from "./inviteMemberModal";
+
 import "./groupDetail.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -11,8 +13,11 @@ export default function GroupDetails() {
 
     const [group, setGroup] = useState(null);
     const [members, setMembers] = useState([]);
+    const [joinRequests, setJoinRequests] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
     const [comments, setComments] = useState([]);
+    const [showInviteModal, setShowInviteModal] = useState(false);
+
 
     function getUserIdFromToken() {
         const token = localStorage.getItem("token");
@@ -55,6 +60,12 @@ export default function GroupDetails() {
         //fetch(`${API_URL}/groups/${id}/comments`)
         //    .then(res => res.json())
         //    .then(data => setComments(data));
+
+        if (userId) {
+            fetch(`${API_URL}/groups/${id}/join-requests`, { headers: authorizedHeader() })
+                .then(res => res.json())
+                .then(data => setJoinRequests(data));
+        }
     }, [id, userId]);
 
     //Leave group for non-owners
@@ -106,12 +117,63 @@ export default function GroupDetails() {
             .then(res => res.json())
             .then(() => {
                 // delete member from display without refresh
-                setGroup(prev => ({
-                    ...prev,
-                    members: prev.members.filter(m => m.id !== userId)
-                }));
+                setMembers(prev => prev.filter(m => m.id !== userId));
             })
             .catch(err => console.error("Remove member error:", err));
+    };
+
+    // Invite member for owners
+    const sendInvite = async (username) => {
+        const res = await fetch(`${API_URL}/groups/${id}/invite-member`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                ...authorizedHeader()
+            },
+            body: JSON.stringify({ username })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || "Failed to send invite.");
+        }
+
+        return true;
+    };
+
+    // ACCEPT JOIN REQUEST
+    const handleAcceptJoin = (requestId, requestUserId, username) => {
+        fetch(`${API_URL}/groups/${id}/join-requests/${requestId}/accept`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", ...authorizedHeader() }
+        })
+            .then(res => res.json())
+            .then(() => {
+                // Add user to members list
+                setMembers(prev => [
+                    ...prev,
+                    {
+                        id: requestUserId,
+                        username: username,
+                        role: "member"
+                    }
+                ]);
+
+                // Remove request from UI
+                setJoinRequests(prev => prev.filter(r => r.id !== requestId));
+            });
+    };
+
+    // DECLINE JOIN REQUEST
+    const handleDeclineJoin = (requestId) => {
+        fetch(`${API_URL}/groups/${id}/join-requests/${requestId}/decline`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", ...authorizedHeader() }
+        })
+            .then(() =>
+                setJoinRequests(prev => prev.filter(r => r.id !== requestId))
+            );
     };
 
 
@@ -141,13 +203,18 @@ export default function GroupDetails() {
                     alt="Group Avatar" 
                     className="group-avatar"
                     />
-                    <p>{group.description}</p>
+                    <p>Description: {group.description}</p>
 
-                    <h3>Members</h3>
+                    <div className="members-header">
+                        <h3>Members</h3>
 
-                    {isOwner && (
-                        <button className="invite-member-btn">Invite member</button>
-                    )}
+                        {isOwner && (
+                            <button 
+                                className="invite-member-btn"
+                                onClick={()=>setShowInviteModal(true)}
+                            >Invite member</button>
+                        )}
+                    </div>
 
 
                     <ul className="member-list">
@@ -164,6 +231,36 @@ export default function GroupDetails() {
                         </li>
                         ))}
                     </ul>
+
+                    {isOwner && (
+                        <div>
+                            <h3>Join Requests</h3>
+
+                            <ul className="invite-list">
+                                {joinRequests.length === 0 && <p>No pending requests.</p>}
+
+                                {joinRequests.map(req => (
+                                    <li key={req.id}>
+                                        {req.username}
+
+                                        <div className="accept-buttons">
+                                            <button className="accept-member-btn"
+                                                onClick={() => handleAcceptJoin(req.id, req.user_id, req.username)}
+                                            >
+                                                <i className="fa-solid fa-check" />
+                                            </button>
+
+                                            <button className="decline-member-btn"
+                                                onClick={() => handleDeclineJoin(req.id)}
+                                            >
+                                                <i className="fa-solid fa-x" />
+                                            </button>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
                     
                     {!isOwner && (
@@ -204,7 +301,16 @@ export default function GroupDetails() {
                         )}
                     </div>
                 </div>
-            </div>    
+            </div>
+            {/* MODAL RENDERING */}
+            {showInviteModal && (
+                <InviteMemberModal
+                    onClose={() => setShowInviteModal(false)}
+                    onInvite={sendInvite}
+                    members={members || []}
+                    ownerId={group.owner_id}
+                />
+            )}    
         </div>
     );
 }

@@ -22,16 +22,6 @@ export default function CreateGroupPage() {
       return { Authorization: `Bearer ${token}` };
   }
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    setAvatar(file);
-
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setPreview(url);
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 

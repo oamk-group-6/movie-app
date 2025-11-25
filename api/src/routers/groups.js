@@ -11,11 +11,15 @@ import {
   getInvitations,
   joinGroup,
   leaveGroup,
-  inviteUser,
+  inviteMember,
   acceptInvitation,
   declineInvitation,
   removeMember,
-  getGroupMembers 
+  getGroupMembers,
+  requestJoinGroup,
+  getJoinRequests,
+  acceptJoinRequest,
+  declineJoinRequest 
 } from "../controllers/groupsController.js";
 import * as membersController from "../controllers/groupMembersController.js";
 import { auth } from "../middleware/auth.js";
@@ -53,11 +57,20 @@ router.post("/:id/leave", auth, leaveGroup);               // Leave group
 router.delete("/:groupId/members/:userId", auth, removeMember); // Remove member
 router.get("/:id/members", auth, getGroupMembers); // Get group members
 
-
-
-router.post("/invite/user", auth, inviteUser);             // Invite someone
+router.post("/:groupId/invite-member", auth, inviteMember);  // Invite someone
+router.post("/:id/request-join", auth, requestJoinGroup);  // Request to join group
 router.post("/invitations/:id/accept", auth, acceptInvitation);
 router.post("/invitations/:id/decline", auth, declineInvitation);
+
+// User clicks "Send Invite" → request sent to group owner
+router.post("/:id/request-join", auth, requestJoinGroup);
+// Owner sees pending join requests (Group details page)
+router.get("/:id/join-requests", auth, getJoinRequests);
+// Owner accepts join request
+router.post("/:groupId/join-requests/:requestId/accept", auth, acceptJoinRequest);
+// Owner declines join request
+router.post("/:groupId/join-requests/:requestId/decline", auth, declineJoinRequest);
+
 
 router.get("/:groupId/members", auth, membersController.getMembers);
 router.post("/:groupId/members", auth, membersController.addMember);

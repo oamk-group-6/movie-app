@@ -97,3 +97,19 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ error: "Database error:" });
   }
 };
+
+export const searchUsersByUsername = async (req, res) => {
+  try {
+    const { username } = req.query;
+
+    if (!username || username.length < 1) {
+      return res.json([]); // return empty list for empty query
+    }
+
+    const users = await usersModel.searchUsersByUsername(username);
+    res.json(users);
+  } catch (err) {
+    console.error("User search error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+};

@@ -38,17 +38,32 @@
     background: #58330A;
     border-radius: 20px;
     padding: 20px;
+
+    color: #F4EB49;
+    font-family: Helvetica, sans-serif;
+    font-size: 0.9rem;
 }
 
 .group-left h2, .group-center h2, .group-right h2 {
     margin-top: 0;
     margin-bottom: 15px;
-    font-size: 1.6rem;
+    font-family: serif;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    color: #FFD700;
 }
 
 .group-left h3 {
     margin-top: 20px;
     margin-bottom: 10px;
+
+    font-family: serif;
+    font-weight: 900;
+    letter-spacing: 1px;
+    font-size: 1.5rem;
+    color: #FFD700;
 }
 
 .group-avatar {
@@ -57,6 +72,32 @@
     border-radius: 10px;
     object-fit: cover;
     background: #777;
+}
+
+.members-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.invite-member-btn{
+    background: #AA671D;
+    color: #F4EB49;
+    border-radius: 10px;
+    min-height: 25px;
+    height: auto;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.invite-member-btn:hover{
+    background: #AA671D;
+    border-color: #F4EB49;    
+    box-shadow: 0 0 0 2px #F4EB49 inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 5px;
 }
 
 .member-list {
@@ -70,4 +111,82 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.leave-group-btn, .delete-group-btn, .remove-member-btn {
+    background: #F4EB49;
+    color: red;
+    border-radius: 10px;
+    min-height: 25px;
+    height: auto;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+}
+.leave-group-btn:hover, .delete-group-btn:hover, .remove-member-btn:hover {
+    background: #F4EB49;
+    border-color: red;    
+    box-shadow: 0 0 0 2px red inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 2px;
+}
+
+.accept-member-btn {
+    background: #AA671D;
+    color: green;
+    border-radius: 10px;
+    min-height: 25px;
+    height: auto;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+}
+.accept-member-btn:hover {
+    background: #AA671D;
+    border-color: green;    
+    box-shadow: 0 0 0 2px green inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 3px;
+}
+.decline-member-btn {
+    background: #F4EB49;
+    color: red;
+    border-radius: 10px;
+    min-height: 25px;
+    height: auto;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+}
+.decline-member-btn:hover {
+    background: #F4EB49;
+    border-color: red;    
+    box-shadow: 0 0 0 2px red inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 3px;
+}
+
+.invite-list{
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+.invite-list li {
+    margin: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.accept-buttons{
+    display: flex;
+    gap: 10px;
 }

@@ -61,6 +61,18 @@ CREATE TABLE group_invitations (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- JOIN REQUESTS
+CREATE TABLE join_requests (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  group_id INTEGER NOT NULL,
+  status VARCHAR(20) DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT fk_joinreq_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_joinreq_group FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
+);
+
 
 -- RATINGS
 CREATE TABLE "ratings" (
@@ -126,3 +138,5 @@ CREATE INDEX idx_comments_list_id ON comments (list_id);
 CREATE INDEX idx_lists_user_id ON lists (owner_user_id);
 CREATE INDEX idx_lists_group_id ON lists (owner_group_id);
 
+CREATE INDEX idx_joinreq_user ON join_requests(user_id);
+CREATE INDEX idx_joinreq_group ON join_requests(group_id);
