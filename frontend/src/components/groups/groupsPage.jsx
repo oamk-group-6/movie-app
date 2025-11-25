@@ -37,10 +37,16 @@ export default function GroupsPage() {
       .then(data => setInvites(data));
   }, [isLoggedIn]);
 
-    //Filter discover groups by search
-    const filteredDiscover = discoverGroups.filter(g =>
-        g.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  //Filter discover groups by search
+  const filteredDiscover = discoverGroups.filter(g =>
+      g.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  function refreshMyGroups() {
+    fetch(`${API_URL}/groups/my/all`, { headers: authorizedHeader() })
+      .then(res => res.json())
+      .then(data => setMyGroups(data));
+  }
 
     
   return (
@@ -53,7 +59,7 @@ export default function GroupsPage() {
         <div className="groups-header">
             <input 
                 className="group-search-input"
-                placeholder="Search groups..."
+                placeholder="Search groups by name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -89,7 +95,9 @@ export default function GroupsPage() {
         <div className="groups-right">
           <GroupInvitations 
             invites={isLoggedIn ? invites : []}
+            setInvites={setInvites}
             loggedIn={isLoggedIn}
+            refreshMyGroups={refreshMyGroups}
           />
         </div>
       </div>

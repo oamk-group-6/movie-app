@@ -1,0 +1,50 @@
+.group-invitations-section{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.group-invitations-section h2{
+    font-family: serif;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    color: #FFD700;
+}
+
+.invitation-card{
+    color: #F4EB49;
+    font-family: Helvetica, sans-serif;
+    font-size: 0.9rem;
+}
+
+.accept-btn,
+.decline-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    color: #FFD700;
+    transition: 0.2s ease;
+    text-shadow: black 0px 0px 5px;
+}
+
+/* Accept button */
+.accept-btn {
+    background: #3e8f41;
+}
+
+.accept-btn:hover {
+    background: #4CAF50;
+}
+
+/* Decline button */
+.decline-btn {
+    background: #c3403c;
+}
+
+.decline-btn:hover {
+    background: #D9534F;
+}

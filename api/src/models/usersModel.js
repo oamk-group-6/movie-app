@@ -19,6 +19,17 @@ export async function getUserByEmail(email) {
   return result.rows[0] || null;
 }
 
+export async function searchUsersByUsername(username) {
+  const result = await pool.query(
+    `SELECT id::int, username 
+     FROM users 
+     WHERE username ILIKE $1
+     LIMIT 10`,
+    [username + "%"]
+  );
+  return result.rows;
+}
+
 export async function addUser(user) {
   const hash = await bcrypt.hash(user.password, 10);
   const query = `

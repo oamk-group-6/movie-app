@@ -1,0 +1,149 @@
+/* ===== OVERLAY ===== */
+.invite-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+}
+
+/* ===== MODAL BOX ===== */
+.invite-modal-box {
+    background: #AA671D;
+    padding: 25px 30px;
+    border-radius: 15px;
+    width: 380px;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.4);
+    color: #F4EB49;
+    font-family: "Source Sans 3";
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ===== TITLE ===== */
+.invite-modal-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+    font-family: "Montserrat";
+}
+
+/* ===== INPUT SECTION (INPUT + DROPDOWN) ===== */
+.invite-input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+/* ===== INPUT ===== */
+.invite-modal-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #fff8d6;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    background: #fff;
+    color: #58330A;
+}
+
+.invite-modal-input:focus {
+    border-color: #F4EB49;
+}
+
+/* ===== SUGGESTIONS DROPDOWN (NORMAL FLOW) ===== */
+.invite-suggestions-box {
+    background: #ffffff;
+    color: #58330A;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* Scrollbar */
+.invite-suggestions-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.invite-suggestions-box::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 5px;
+}
+
+/* Dropdown item */
+.invite-suggestion-item {
+    padding: 10px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.invite-suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.invite-suggestion-item:hover {
+    background: #f4eb49;
+    color: #58330A;
+}
+
+/* ===== SUCCESS & ERROR TEXT ===== */
+.invite-modal-error {
+    color: #ffcccc;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+.invite-modal-success {
+    color: #c8ffb0;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+/* ===== BUTTONS ===== */
+.invite-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.invite-modal-btn {
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    border: none;
+    transition: 0.2s;
+}
+
+.invite-modal-btn.cancel {
+    background: #58330A;
+    color: #F4EB49;
+}
+
+.invite-modal-btn.cancel:hover {
+    box-shadow: inset 0 0 0 2px #F4EB49;
+}
+
+.invite-modal-btn.send {
+    background: #F4EB49;
+    color: #58330A;
+    font-weight: bold;
+}
+
+.invite-modal-btn.send:hover {
+    background: #f8f272;
+}

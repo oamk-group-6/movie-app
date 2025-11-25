@@ -140,20 +140,50 @@ export const leaveGroup = async (req, res) => {
   }
 };
 
-export const inviteUser = async (req, res) => {
+export const inviteMember = async (req, res) => {
   try {
     const invitedBy = req.user.userId;
-    const { groupId, invitedUserId } = req.body;
+    const { groupId } = req.params;
+    const { username } = req.body;
+
+    if (!username) {
+      return res.status(400).json({ error: "Username is required" });
+    }
+
+    const group = await groupsModel.getGroupById(groupId);
+    if (!group) return res.status(404).json({ error: "Group not found" });
+
+    if(group.owner_id != invitedBy) {
+      return res.status(403).json({ error: "Only the group owner can invite members" });
+    }
+
+    const user = await groupsModel.getUserByUsername(username);
+    if (!user) return res.status(404).json({ error: "User not found" });
+    
+    if (user.id === invitedBy) {
+      return res.status(400).json({ error: "You cannot invite yourself" });
+    }
+
+    const isMember = await groupsModel.isUserMember(user.id, groupId);
+    if(isMember) {
+      return res.status(400).json({ error: "User is already a member" });
+    }
+
+    const alreadyInvited = await groupsModel.hasPendingInvite(user.id, groupId);
+    if(alreadyInvited) {
+      return res.status(400).json({ error: "User already has a pending invitation." });
+    }
 
     const invite = await groupsModel.inviteUser({
       groupId,
-      invitedUserId,
+      invitedUserId: user.id,
       invitedBy
     });
 
-    res.json(invite);
+    res.status(201).json({ message: "Invite sent!",invite });
+  
   } catch(err) {
-    console.error(err);
+    console.error("inviteMember error: ",err);
     res.status(500).json({ error: "Database error" });
   }
 };
@@ -219,4 +249,100 @@ export const getGroupMembers = async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Database error" });
   }
+};
+
+export const requestJoinGroup = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const groupId = req.params.id;
+
+        const group = await groupsModel.getGroupById(groupId);
+        if (!group) return res.status(404).json({ error: "Group not found" });
+
+        if (group.owner_id === userId) {
+            return res.status(400).json({ error: "You already own this group" });
+        }
+
+        const alreadyMember = await groupsModel.isUserMember(userId, groupId);
+        if (alreadyMember) {
+            return res.status(400).json({ error: "You are already a member" });
+        }
+
+        const pending = await groupsModel.hasPendingJoinRequest(userId, groupId);
+        if (pending) {
+            return res.status(400).json({ error: "Request already sent" });
+        }
+
+        const request = await groupsModel.createJoinRequest(userId, groupId);
+
+        res.status(201).json({ message: "Join request sent!", request });
+
+    } catch (err) {
+        console.error("requestJoinGroup error:", err);
+        res.status(500).json({ error: "Database error" });
+    }
+};
+
+export const getJoinRequests = async (req, res) => {
+    try {
+        const groupId = req.params.id;
+
+        const group = await groupsModel.getGroupById(groupId);
+        if (!group) return res.status(404).json({ error: "Group not found" });
+
+        if (group.owner_id !== req.user.userId) {
+            return res.status(403).json({ error: "Only the owner can view join requests" });
+        }
+
+        const requests = await groupsModel.getJoinRequests(groupId);
+        res.json(requests);
+
+    } catch (err) {
+        console.error("getJoinRequests error:", err);
+        res.status(500).json({ error: "Database error" });
+    }
+};
+
+export const acceptJoinRequest = async (req, res) => {
+    try {
+        const { groupId, requestId } = req.params;
+
+        const group = await groupsModel.getGroupById(groupId);
+        if (!group) return res.status(404).json({ error: "Group not found" });
+
+        if (group.owner_id !== req.user.userId) {
+            return res.status(403).json({ error: "Only the owner can accept requests" });
+        }
+
+        const result = await groupsModel.acceptJoinRequest(requestId);
+        if (!result) return res.status(404).json({ error: "Request not found" });
+
+        res.json({ accepted: true });
+
+    } catch (err) {
+        console.error("acceptJoinRequest error:", err);
+        res.status(500).json({ error: "Database error" });
+    }
+};
+
+export const declineJoinRequest = async (req, res) => {
+    try {
+        const { groupId, requestId } = req.params;
+
+        const group = await groupsModel.getGroupById(groupId);
+        if (!group) return res.status(404).json({ error: "Group not found" });
+
+        if (group.owner_id !== req.user.userId) {
+            return res.status(403).json({ error: "Only the owner can decline requests" });
+        }
+
+        const result = await groupsModel.declineJoinRequest(requestId);
+        if (!result) return res.status(404).json({ error: "Request not found" });
+
+        res.json({ declined: true });
+
+    } catch (err) {
+        console.error("declineJoinRequest error:", err);
+        res.status(500).json({ error: "Database error" });
+    }
 };

@@ -6,11 +6,14 @@ import {
   updateUser, 
   deleteUser, 
   changePassword,
-  patchUser
+  patchUser,
+  searchUsersByUsername
 } from "../controllers/usersController.js";
 import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
+
+router.get("/search", auth, searchUsersByUsername);
 
 router.get("/", auth, getUsers);
 router.get("/:id", getUserById);

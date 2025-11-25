@@ -135,6 +135,53 @@ export async function inviteUser({ groupId, invitedUserId, invitedBy }) {
   return result.rows[0];
 }
 
+export async function isUserMember(userId, groupId) {
+  const result = await pool.query(
+    `SELECT 1 FROM group_members 
+     WHERE user_id = $1 AND group_id = $2`,
+    [userId, groupId]
+  );
+  return result.rows.length > 0;
+}
+
+export async function hasPendingInvite(userId, groupId) {
+  const result = await pool.query(
+    `SELECT 1 FROM group_invitations 
+     WHERE invited_user_id = $1 
+       AND group_id = $2
+       AND status = 'pending'`,
+    [userId, groupId]
+  );
+  return result.rows.length > 0;
+}
+
+export async function getUserByUsername(username) {
+  const result = await pool.query(
+    `SELECT * FROM users WHERE username = $1 LIMIT 1`,
+    [username]
+  );
+  return result.rows[0];
+}
+
+export async function hasPendingJoinRequest(userId, groupId) {
+  const result = await pool.query(
+    `SELECT 1 FROM join_requests 
+     WHERE user_id = $1 AND group_id = $2 AND status = 'pending'`,
+    [userId, groupId]
+  );
+  return result.rows.length > 0;
+}
+
+export async function createJoinRequest(userId, groupId) {
+  const result = await pool.query(
+    `INSERT INTO join_requests (user_id, group_id)
+     VALUES ($1, $2)
+     RETURNING *`,
+    [userId, groupId]
+  );
+  return result.rows[0];
+}
+
 
 export async function acceptInvite(inviteId, userId) {
   const res = await pool.query(
@@ -206,4 +253,67 @@ export async function removeMember(userId, groupId) {
     [userId, groupId]
   );
   return result.rows[0];
+}
+
+// Get pending join requests for a group
+export async function getJoinRequests(groupId) {
+  const result = await pool.query(
+    `
+    SELECT 
+      jr.id,
+      jr.user_id,
+      u.username,
+      jr.created_at
+    FROM join_requests jr
+    JOIN users u ON u.id = jr.user_id
+    WHERE jr.group_id = $1 AND jr.status = 'pending'
+    ORDER BY jr.created_at ASC
+    `,
+    [groupId]
+  );
+  return result.rows;
+}
+
+// Accept join request → add to members + update request status
+export async function acceptJoinRequest(requestId) {
+
+  // Get request info
+  const requestRes = await pool.query(
+    `SELECT * FROM join_requests WHERE id = $1`,
+    [requestId]
+  );
+
+  if (requestRes.rows.length === 0) return null;
+
+  const request = requestRes.rows[0];
+
+  // Mark as accepted
+  await pool.query(
+    `UPDATE join_requests SET status = 'accepted' WHERE id = $1`,
+    [requestId]
+  );
+
+  // Add user as group member
+  await pool.query(
+    `
+    INSERT INTO group_members (user_id, group_id, role)
+    VALUES ($1, $2, 'member')
+    ON CONFLICT DO NOTHING
+    `,
+    [request.user_id, request.group_id]
+  );
+
+  return request;
+}
+
+// Decline a join request
+export async function declineJoinRequest(requestId) {
+  const res = await pool.query(
+    `UPDATE join_requests 
+     SET status = 'declined'
+     WHERE id = $1
+     RETURNING *`,
+    [requestId]
+  );
+  return res.rows[0];
 }
