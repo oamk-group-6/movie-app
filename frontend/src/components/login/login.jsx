@@ -90,6 +90,12 @@ export default function Login() {
                         Log in
                     </button>
 
+                    {error && (
+                        <div className="error-box">
+                            {error}
+                        </div>
+                    )}
+
                     <p className="signup-text">
                         Don't have an account? 
                         <a href="/register" className="signup-link">Sign up here</a>

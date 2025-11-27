@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { getUserByEmail, addUser } from "../models/usersModel.js";
+import { getUserByEmail, getUserByUsername, addUser } from "../models/usersModel.js";
 
 
 //Käyttäjän rekisteröinti
@@ -11,10 +11,15 @@ export async function registerUser(req, res, next) {
     if (!username || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
+    //Tarkistetaan onko käyttäjätunnus jo käytössä
+    const existingUsername = await getUserByUsername(username);
+    if (existingUsername) {
+      return res.status(400).json({ error: "Username is already in use" });
+    }
 
     //Tarkistetaan onko sähköposti jo käytössä
-    const existingUser = await getUserByEmail(email);
-    if (existingUser) {
+    const existingEmail = await getUserByEmail(email);
+    if (existingEmail) {
       return res.status(400).json({ error: "Email is already registered" });
     }
 

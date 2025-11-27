@@ -132,8 +132,23 @@ export const leaveGroup = async (req, res) => {
     const userId = req.user.userId;
     const groupId = req.params.id;
 
+    const group = await groupsModel.getGroupById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    if (group.owner_id === userId) {
+      return res.status(400).json({ error: "Owner cannot leave their group" });
+    }
+
     const left = await groupsModel.leaveGroup(groupId, userId);
-    res.json({ left: !!left });
+    
+    if (!left) {
+      return res.status(400).json({ error: "User was not a member of this group" });
+    }
+
+    res.json({ success: true });
+
   } catch(err) {
     console.error(err);
     res.status(500).json({ error: "Database error" });
@@ -167,6 +182,11 @@ export const inviteMember = async (req, res) => {
     const isMember = await groupsModel.isUserMember(user.id, groupId);
     if(isMember) {
       return res.status(400).json({ error: "User is already a member" });
+    }
+
+    const hasJoinRequest = await groupsModel.hasPendingJoinRequest(user.id, groupId);
+    if (hasJoinRequest) {
+      return res.status(400).json({ error: "User already sent a join request." });
     }
 
     const alreadyInvited = await groupsModel.hasPendingInvite(user.id, groupId);
@@ -205,10 +225,9 @@ export const acceptInvitation = async (req, res) => {
 
 export const declineInvitation = async (req, res) => {
   try {
-    const userId = req.user.userId;
     const inviteId = req.params.id;
 
-    const success = await groupsModel.declineInvite(inviteId, userId);
+    const success = await groupsModel.declineInvite(inviteId);
     if (!success) return res.status(404).json({ error: "Invite not found" });
 
     res.json({ declined: true });
@@ -272,6 +291,12 @@ export const requestJoinGroup = async (req, res) => {
         if (pending) {
             return res.status(400).json({ error: "Request already sent" });
         }
+
+        const hasInvite = await groupsModel.hasPendingInvite(userId, groupId);
+        if (hasInvite) {
+          return res.status(400).json({ error: "You already have an invitation from this group." });
+        }
+
 
         const request = await groupsModel.createJoinRequest(userId, groupId);
 

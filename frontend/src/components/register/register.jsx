@@ -25,6 +25,7 @@ export default function Register() {
             const data = await res.json();
 
             if (!res.ok) {
+                console.log("Register failed:", data);
                 setError(data.error || "Registration failed");
                 return;
             }
@@ -47,6 +48,7 @@ export default function Register() {
 
             <div className="register-card">
                 <h2 className="register-title">Create Your Account</h2>
+
                 
                 <form onSubmit={handleSubmit}>
 
@@ -104,6 +106,12 @@ export default function Register() {
                     <button className="register-btn" type="submit">
                         Create Account
                     </button>
+
+                    {error && (
+                        <div className="error-box">
+                            {error}
+                        </div>
+                    )}
 
                     <p className="login-text">
                         Already have an account? 

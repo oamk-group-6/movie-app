@@ -2,6 +2,10 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+
+    color: #F4EB49;
+    font-family: Helvetica, sans-serif;
+    font-size: 0.9rem;
 }
 
 .group-invitations-section h2{
@@ -33,18 +37,50 @@
 
 /* Accept button */
 .accept-btn {
-    background: #3e8f41;
+    background: #AA671D;
+    color: green;
+    border-radius: 10px;
+    min-height: 25px;
+    height: auto;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
 }
 
 .accept-btn:hover {
-    background: #4CAF50;
+    background: #AA671D;
+    border-color: green;    
+    box-shadow: 0 0 0 2px green inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 3px;
 }
 
 /* Decline button */
 .decline-btn {
-    background: #c3403c;
+    background: #F4EB49;
+    color: red;
+    border-radius: 10px;
+    min-height: 25px;
+    height: auto;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
 }
 
 .decline-btn:hover {
-    background: #D9534F;
+    background: #F4EB49;
+    border-color: red;    
+    box-shadow: 0 0 0 2px red inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 3px;
+}
+.buttons-container{
+    display: flex;
+    gap: 10px;
 }

@@ -102,13 +102,13 @@
 
 /* ===== SUCCESS & ERROR TEXT ===== */
 .invite-modal-error {
-    color: #ffcccc;
+    color: red;
     font-size: 0.9rem;
     margin-top: 4px;
 }
 
 .invite-modal-success {
-    color: #c8ffb0;
+    color: green;
     font-size: 0.9rem;
     margin-top: 4px;
 }
