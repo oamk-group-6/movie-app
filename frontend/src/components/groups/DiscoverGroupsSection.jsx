@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import './DiscoverGroupsSection.css';
 
@@ -13,6 +13,14 @@ function authorizedHeader() {
 export default function DiscoverGroupsSection({ groups, loggedIn }){
     const [requestStatus, setRequestStatus] = useState({});
 
+    useEffect(() => {
+        const status = {};
+        groups.forEach(g => {
+            if (g.has_pending_request) status[g.id] = "sent";
+        });
+        setRequestStatus(status);
+    }, [groups]);
+
     if (!loggedIn) {
         return (
             <div className="discover-groups-section">
@@ -23,6 +31,12 @@ export default function DiscoverGroupsSection({ groups, loggedIn }){
     }
 
     const handleJoinRequest = async (groupId) => {
+        const group = groups.find(g => g.id === groupId);
+        if (group.has_pending_invite) {
+            alert("You already have an invitation from this group.");
+            return;
+        }
+
         // prevent double clicking
         if (requestStatus[groupId] === "sent") return;
 
@@ -56,34 +70,49 @@ export default function DiscoverGroupsSection({ groups, loggedIn }){
             <h2>Discover Groups</h2>
 
             <div className="discover-grid">
-                {groups.map(group => (
-                    <div className="discover-card" key={group.id}>
-                        <img
-                            src={`${API_URL}${group.avatar_url}`}
-                            alt={`${group.name} Avatar`}
-                            className="discover-avatar"
-                        />
+                {groups.map(group => {
+                    const status = requestStatus[group.id];
 
-                        <div className="group-info">
-                            <h4>{group.name}</h4>
-                            <p>{group.member_count} members</p>
+                    const showInvitePending =
+                        group.has_pending_invite && status !== "sent";
 
-                            <button 
-                                className="view-group-btn"
-                                onClick={() => handleJoinRequest(group.id)}
-                                disabled={requestStatus[group.id] === "sent" || requestStatus[group.id] === "loading"}
-                            >
-                                {requestStatus[group.id] === "loading" && "Sending..."}
-                                {requestStatus[group.id] === "sent" && "Request Sent!"}
-                                {!requestStatus[group.id] && "Send Invite"}
-                            </button>
-                            
-                            {requestStatus[group.id] === "error" && (
-                                <p className="request-error">Failed to send.</p>
-                            )}
+                    const showRequestSent = status === "sent";
+
+                    const disableButton =
+                        showInvitePending ||
+                        showRequestSent ||
+                        status === "loading";
+
+                    return (
+                        <div className="discover-card" key={group.id}>
+                            <img
+                                src={`${API_URL}${group.avatar_url}`}
+                                alt={`${group.name} Avatar`}
+                                className="discover-avatar"
+                            />
+
+                            <div className="group-info">
+                                <h4>{group.name}</h4>
+                                <p>{group.member_count} members</p>
+
+                                <button
+                                    className="view-group-btn"
+                                    onClick={() => handleJoinRequest(group.id)}
+                                    disabled={disableButton}
+                                >
+                                    {status === "loading" && "Sending..."}
+                                    {showRequestSent && "Request Sent!"}
+                                    {showInvitePending && "Check Invitations"}
+                                    {!status && !group.has_pending_invite && "Send Invite"}
+                                </button>
+
+                                {requestStatus[group.id] === "error" && (
+                                    <p className="request-error">Failed to send.</p>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

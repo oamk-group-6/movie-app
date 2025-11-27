@@ -82,7 +82,20 @@ export async function getDiscoverGroups(userId) {
       g.id,
       g.name,
       g.avatar_url,
-      COUNT(gm.user_id) AS member_count
+      COUNT(gm.user_id) AS member_count,
+      EXISTS (
+        SELECT 1 FROM group_members gm2
+        WHERE gm2.user_id = $1 AND gm2.group_id = g.id
+      ) AS is_member,
+      EXISTS (
+        SELECT 1 FROM join_requests jr
+        WHERE jr.user_id = $1 AND jr.group_id = g.id AND jr.status = 'pending'
+      ) AS has_pending_request,
+      EXISTS (
+        SELECT 1 FROM group_invitations gi
+        WHERE gi.invited_user_id = $1 AND gi.group_id = g.id AND gi.status = 'pending'
+      ) AS has_pending_invite
+
     FROM groups g
     LEFT JOIN group_members gm ON gm.group_id = g.id
     WHERE g.id NOT IN (
@@ -111,6 +124,20 @@ export async function getInvitations(userId) {
   const result = await pool.query(query, [userId]);
   return result.rows;
 }
+
+export const leaveGroup = async (groupId, userId) => {
+    const result = await pool.query(
+        `
+        DELETE FROM group_members
+        WHERE group_id = $1 AND user_id = $2
+        RETURNING *;
+        `,
+        [groupId, userId]
+    );
+
+    return result.rows[0];
+};
+
 
 export async function joinGroup(groupId, userId) {
   const result = await pool.query(
@@ -207,13 +234,12 @@ export async function acceptInvite(inviteId, userId) {
   return invite;
 }
 
-export async function declineInvite(inviteId, userId) {
+export async function declineInvite(inviteId) {
   const res = await pool.query(
-    `UPDATE group_invitations 
-     SET status = 'declined' 
-     WHERE id = $1 AND invited_user_id = $2
+    `DELETE FROM group_invitations
+     WHERE id = $1
      RETURNING *`,
-    [inviteId, userId]
+    [inviteId]
   );
 
   return res.rows[0];
@@ -309,8 +335,7 @@ export async function acceptJoinRequest(requestId) {
 // Decline a join request
 export async function declineJoinRequest(requestId) {
   const res = await pool.query(
-    `UPDATE join_requests 
-     SET status = 'declined'
+    `DELETE FROM join_requests
      WHERE id = $1
      RETURNING *`,
     [requestId]

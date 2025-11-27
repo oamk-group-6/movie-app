@@ -61,12 +61,18 @@ export default function GroupDetails() {
         //    .then(res => res.json())
         //    .then(data => setComments(data));
 
-        if (userId) {
-            fetch(`${API_URL}/groups/${id}/join-requests`, { headers: authorizedHeader() })
-                .then(res => res.json())
-                .then(data => setJoinRequests(data));
-        }
     }, [id, userId]);
+
+    // Fetch join requests if user is owner
+    useEffect(() => {
+        if (!isOwner) return; 
+
+        fetch(`${API_URL}/groups/${id}/join-requests`, { headers: authorizedHeader() })
+            .then(res => res.json())
+            .then(data => setJoinRequests(data))
+            .catch(err => console.error("Join request error:", err));
+
+    }, [isOwner, id]);
 
     //Leave group for non-owners
     const handleLeaveGroup = () => {

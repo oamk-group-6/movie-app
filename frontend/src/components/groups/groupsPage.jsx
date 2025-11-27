@@ -24,30 +24,33 @@ export default function GroupsPage() {
   useEffect(() => {
     if (!isLoggedIn) return;
 
-    fetch(`${API_URL}/groups/my/all`, { headers: authorizedHeader() })
-      .then(res => res.json())
-      .then(data => setMyGroups(data));
-
-    fetch(`${API_URL}/groups/discover/all`, { headers: authorizedHeader() })
-      .then(res => res.json())
-      .then(data => setDiscoverGroups(data));
-
-    fetch(`${API_URL}/groups/invitations/all`, { headers: authorizedHeader() })
-      .then(res => res.json())
-      .then(data => setInvites(data));
+    fetchMyGroups();
+    fetchDiscoverGroups();
+    fetchInvitations();
   }, [isLoggedIn]);
 
-  //Filter discover groups by search
-  const filteredDiscover = discoverGroups.filter(g =>
-      g.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  function refreshMyGroups() {
+  function fetchMyGroups() {
     fetch(`${API_URL}/groups/my/all`, { headers: authorizedHeader() })
       .then(res => res.json())
       .then(data => setMyGroups(data));
   }
 
+  function fetchDiscoverGroups() {
+    fetch(`${API_URL}/groups/discover/all`, { headers: authorizedHeader() })
+      .then(res => res.json())
+      .then(data => setDiscoverGroups(data));
+  }
+
+  function fetchInvitations() {
+    fetch(`${API_URL}/groups/invitations/all`, { headers: authorizedHeader() })
+      .then(res => res.json())
+      .then(data => setInvites(data));
+  }
+
+  //Filter discover groups by search
+  const filteredDiscover = discoverGroups.filter(g =>
+      g.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
     
   return (
 
@@ -89,6 +92,7 @@ export default function GroupsPage() {
           <DiscoverGroupsSection 
             groups={isLoggedIn ? filteredDiscover : null}
             loggedIn={isLoggedIn}
+            refreshDiscoverGroups={fetchDiscoverGroups}
           />
         </div>
 
@@ -98,7 +102,9 @@ export default function GroupsPage() {
             invites={isLoggedIn ? invites : []}
             setInvites={setInvites}
             loggedIn={isLoggedIn}
-            refreshMyGroups={refreshMyGroups}
+            refreshMyGroups={fetchMyGroups}
+            refreshDiscoverGroups={fetchDiscoverGroups}
+            refreshInvitations={fetchInvitations}
           />
         </div>
       </div>

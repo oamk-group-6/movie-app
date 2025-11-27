@@ -22,6 +22,10 @@
 .my-groups-section{
     display: flex;
     flex-direction: column;
+
+    color: #F4EB49;
+    font-family: Helvetica, sans-serif;
+    font-size: 0.9rem;
 }
 .my-groups-section h2{
     font-family: serif;

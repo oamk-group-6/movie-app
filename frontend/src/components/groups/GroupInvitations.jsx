@@ -8,7 +8,7 @@ function authorizedHeader() {
     return { Authorization: `Bearer ${token}` };
 }
 
-export default function GroupInvitations({ invites, setInvites,loggedIn, refreshMyGroups }) {
+export default function GroupInvitations({ invites, setInvites,loggedIn, refreshMyGroups, refreshDiscoverGroups, refreshInvitations }) {
 
     const handleAccept = (inviteId) => {
         fetch(`${API_URL}/groups/invitations/${inviteId}/accept`, {
@@ -26,6 +26,8 @@ export default function GroupInvitations({ invites, setInvites,loggedIn, refresh
                 // Remove invite from UI
                 setInvites(prev => prev.filter(inv => inv.id !== inviteId));
                 refreshMyGroups();
+                refreshDiscoverGroups();
+                refreshInvitations();
             })
             .catch(err => console.error(err));
     };
@@ -44,6 +46,9 @@ export default function GroupInvitations({ invites, setInvites,loggedIn, refresh
             })
             .then(() => {
                 setInvites(prev => prev.filter(inv => inv.id !== inviteId));
+
+                refreshDiscoverGroups();
+                refreshInvitations();
             })
             .catch(err => console.error(err));
     };
@@ -68,14 +73,20 @@ export default function GroupInvitations({ invites, setInvites,loggedIn, refresh
             {invites && invites.map(invite => (
                 <div key={invite.id} className="invitation-card">
                     <p>You have been invited to join: <strong>{invite.group_name}</strong></p>
-                    <button 
-                        className="accept-btn"
-                        onClick={() => handleAccept(invite.id)}    
-                    >Accept</button>
-                    <button 
-                        className="decline-btn"
-                        onClick={() => handleDecline(invite.id)}    
-                    >Decline</button>
+                    <div className="buttons-container">
+                        <button 
+                            className="accept-btn"
+                            onClick={() => handleAccept(invite.id)}    
+                        >
+                            <i className="fa-solid fa-check" />
+                        </button>
+                        <button 
+                            className="decline-btn"
+                            onClick={() => handleDecline(invite.id)}    
+                        >
+                            <i className="fa-solid fa-x" />
+                        </button>
+                    </div>
                 </div>
             ))}
         </div>
