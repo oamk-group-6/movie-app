@@ -63,14 +63,15 @@ export default function GroupsPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
-
-            <button 
-              className="create-group-btn"
-              onClick={() => navigate("/groups/create")}
-            >
-                <span className="btn-icon"><i className="fa-solid fa-plus"></i></span>
-                Create New Group
-            </button>
+            {isLoggedIn &&(
+              <button 
+                className="create-group-btn"
+                onClick={() => navigate("/groups/create")}
+              >
+                  <span className="btn-icon"><i className="fa-solid fa-plus"></i></span>
+                  Create New Group
+              </button>
+            )}
         </div>
 
       <div className="groups-content">

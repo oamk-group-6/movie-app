@@ -1,5 +1,6 @@
 import {useState} from "react";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "../searchBar";
 
 import "./createGroupPage.css";
 
@@ -62,15 +63,19 @@ export default function CreateGroupPage() {
 
 
   return (
-    <div>
-            <h2>Create a New Group</h2>
-            
+    <div className="create-group-page">
+      <header>
+        <SearchBar />
+      </header>
+                   
             <form onSubmit={handleSubmit} className="create-group-form">
-        
+                <h2>Create a New Group</h2>
+
                 <label>Group Name</label>
                 <input
                     type="text"
                     className="group-input"
+                    placeholder="Name of the group"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -79,7 +84,9 @@ export default function CreateGroupPage() {
                 <label>Description</label>
                 <textarea
                     className="group-textarea"
+                    placeholder="Description of the group...(max 250 characters)"
                     value={description}
+                    maxLength={250}
                     onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
 
@@ -87,7 +94,7 @@ export default function CreateGroupPage() {
                 <input
                     type="file"
                     accept="image/*"
-                    className="group-input"
+                    className="avatar-input"
                     onChange={(e) => setAvatar(e.target.files[0])}
                 />
 
@@ -95,8 +102,8 @@ export default function CreateGroupPage() {
                     Create Group
                 </button>
 
-                {error && <p className="error-message">{error}</p>}
-                {success && <p className="success-message">{success}</p>}
+                {error && <p className="create-error-message">{error}</p>}
+                {success && <p className="create-success-message">{success}</p>}
             </form>
     </div>
   );
