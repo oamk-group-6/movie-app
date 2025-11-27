@@ -13,14 +13,6 @@ function authorizedHeader() {
 export default function DiscoverGroupsSection({ groups, loggedIn }){
     const [requestStatus, setRequestStatus] = useState({});
 
-    useEffect(() => {
-        const status = {};
-        groups.forEach(g => {
-            if (g.has_pending_request) status[g.id] = "sent";
-        });
-        setRequestStatus(status);
-    }, [groups]);
-
     if (!loggedIn) {
         return (
             <div className="discover-groups-section">
@@ -29,6 +21,14 @@ export default function DiscoverGroupsSection({ groups, loggedIn }){
             </div>
         );
     }
+
+    useEffect(() => {
+        const status = {};
+        groups.forEach(g => {
+            if (g.has_pending_request) status[g.id] = "sent";
+        });
+        setRequestStatus(status);
+    }, [groups]);
 
     const handleJoinRequest = async (groupId) => {
         const group = groups.find(g => g.id === groupId);
