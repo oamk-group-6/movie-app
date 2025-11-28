@@ -10,6 +10,7 @@ import GroupDetails from "./components/groups/groupDetail.jsx";
 
 import UserPage from "./components/userPage.jsx";
 import MovieDetail from "./components/movieDetail.jsx"
+import ReviewMovie from "./components/reviewMovie.jsx"
 
 
 function App() {
@@ -38,8 +39,12 @@ function App() {
 
         {/**User page */}
         <Route path="/userpage" element={<UserPage />} />
+
         {/* Movie Details */}
         <Route path="/movies/:id" element={<MovieDetail />} />
+
+        {/* Movie Review Page */}
+        <Route path="/movies/:id/review" element={<ReviewMovie />} />
 
 
       </Routes>
