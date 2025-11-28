@@ -1,0 +1,130 @@
+.movie-detail-container { 
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  background-color: black;
+  color: #ddd;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin-top: 40px;
+  flex-wrap: nowrap;
+}
+
+.left-side {
+  flex: 0 1 33%;
+  max-width: 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 250px;
+}
+
+.movie-title {
+  font-weight: bold;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.movie-poster {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+}
+
+.right-side {
+  flex: 1 1 67%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  line-height: 1.6;
+  font-size: 1rem;
+  color: #bbb;
+  min-width: 0;
+  padding-top: 150px;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-box {
+  width: 100%;
+  height: 200px;
+  resize: vertical;
+}
+
+.review-button {
+  padding: 12px 25px;
+  border-radius: 6px;
+  border: none;
+  background-color: #a46318;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: center;
+}
+
+.review-button:hover {
+  background-color: #d58b2c;
+}
+
+.banana-meter {
+  width: 70%;
+  height: 30px;
+  background-color: #8B4513;
+  border: 2px solid #8B4513;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.banana-meter-fill {
+  height: 100%;
+  background-color: #FFD700;
+  border-radius: 3px 0 0 3px;
+  transition: width 0.1s linear;
+}
+
+.banana-meter-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: black;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .movie-detail-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .left-side,
+  .right-side {
+    flex: 1 1 100%;
+    max-width: 500px;
+    text-align: center;
+    align-items: center;
+  }
+
+  .right-side {
+    justify-content: flex-start;
+  }
+}

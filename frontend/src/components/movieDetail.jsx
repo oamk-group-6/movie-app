@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchBar.jsx";
 
 import "./movieDetail.css"
@@ -7,6 +8,7 @@ import "./movieDetail.css"
 const API_URL = process.env.REACT_APP_API_URL
 
 export default function MovieDetail() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
 
@@ -16,9 +18,10 @@ export default function MovieDetail() {
             .then(data => setMovie(data));
     }, [id]);
 
-    if (!movie) return <p>Loading...</p>;
-    console.log(movie.release_year, movie.genre, movie.runtime);
+    console.log("API_URL:", API_URL);
 
+
+    if (!movie) return <p>Loading...</p>;
 
     return (
         <div>
@@ -39,8 +42,12 @@ export default function MovieDetail() {
                 <div className="right-side">
                     <p className="movie-description">{movie.description}</p>
                     <div className="bottom-row">
-                        
-                        <button type="button" className="review-button">
+
+                        <button
+                            type="button"
+                            className="review-button"
+                            onClick={() => navigate(`/movies/${id}/review`)}
+                        >
                             Review this movie
                         </button>
                     </div>

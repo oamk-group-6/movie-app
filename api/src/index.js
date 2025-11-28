@@ -8,6 +8,7 @@ import groupsRouter from "./routers/groups.js";
 import listsRouter from "./routers/lists.js";
 import commetnsRouter from "./routers/comments.js";
 import listMoviesRouter from "./routers/listMovies.js";
+import ratingsRouter from "./routers/ratings.js";
 
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/lists", listsRouter);
 app.use("/comments", commetnsRouter);
 app.use("/auth", authRouter);
 app.use("/lists-movies", listMoviesRouter);
+app.use("/ratings", ratingsRouter);
 
 app.use("/uploads", express.static("uploads"));
 
