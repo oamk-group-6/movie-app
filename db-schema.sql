@@ -125,6 +125,16 @@ CREATE TABLE "comments" (
   CONSTRAINT fk_comments_list FOREIGN KEY ("list_id") REFERENCES "lists" ("id") ON DELETE CASCADE
 );
 
+--GROUP COMMENTS
+CREATE TABLE group_comments (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  group_id INTEGER,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_group_comments_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  CONSTRAINT fk_group_comments_group FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE
+);
 
 ALTER TABLE lists ADD COLUMN share_id VARCHAR(50) UNIQUE;
 
@@ -135,6 +145,7 @@ CREATE INDEX idx_ratings_movie_id ON ratings (movie_id);
 CREATE INDEX idx_comments_user_id ON comments (user_id);
 CREATE INDEX idx_comments_movie_id ON comments (movie_id);
 CREATE INDEX idx_comments_list_id ON comments (list_id);
+CREATE INDEX idx_group_comments_group_id ON group_comments (group_id);
 CREATE INDEX idx_lists_user_id ON lists (owner_user_id);
 CREATE INDEX idx_lists_group_id ON lists (owner_group_id);
 
