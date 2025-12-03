@@ -1,20 +1,57 @@
 import pool from "../database.js";
 
-
+// Example of query from frontend: /movies?genres=Action,Comedy&yearFrom=2015&yearTo=2022&language=English&country=USA&ratingMin=7&ratingMax=9
 export async function getAllMovies(filters = {}) {
-  const { genre, year, limit = 50, offset = 0 } = filters;
-  const params = [];
-  let query = "SELECT * FROM movies";
-  const conditions = [];
+  const {
+    genres,
+    yearFrom,
+    yearTo,
+    language,
+    country,
+    ratingMin,
+    ratingMax,
+    limit = 50,
+    offset = 0
+  } = filters;
 
-  if (genre) {
-    conditions.push(`genre ILIKE $${params.length + 1}`);
-    params.push(`%${genre}%`);
+  const params = [];
+  const conditions = [];
+  let query = "SELECT * FROM movies";
+
+  if (genres && genres.length > 0) {
+    const genreConditions = genres.map((g, i) => {
+      params.push(`%${g}%`);
+      return `genre ILIKE $${params.length}`;
+    });
+    conditions.push("(" + genreConditions.join(" OR ") + ")");
   }
 
-  if (year) {
-    conditions.push(`release_year = $${params.length + 1}`);
-    params.push(year);
+  if (yearFrom !== undefined) {
+    params.push(yearFrom);
+    conditions.push(`release_year >= $${params.length}`);
+  }
+  if (yearTo !== undefined) {
+    params.push(yearTo);
+    conditions.push(`release_year <= $${params.length}`);
+  }
+
+  if (language) {
+    params.push(`%${language}%`);
+    conditions.push(`language ILIKE $${params.length}`);
+  }
+
+  if (country) {
+    params.push(`%${country}%`);
+    conditions.push(`country ILIKE $${params.length}`);
+  }
+
+  if (ratingMin !== undefined) {
+    params.push(ratingMin);
+    conditions.push(`rating_avg >= $${params.length}`);
+  }
+  if (ratingMax !== undefined) {
+    params.push(ratingMax);
+    conditions.push(`rating_avg <= $${params.length}`);
   }
 
   if (conditions.length > 0) {
