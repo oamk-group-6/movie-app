@@ -1,3 +1,4 @@
+
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
@@ -9,14 +10,23 @@ import listsRouter from "./routers/lists.js";
 import commetnsRouter from "./routers/comments.js";
 import listMoviesRouter from "./routers/listMovies.js";
 import ratingsRouter from "./routers/ratings.js";
-import groupCommentsRouter from "./routers/groupComments.js";
+//import favouritesRouter from "./routers/favourites.js";
+
+
+
+import path from "path";
+import { fileURLToPath } from "url";
+
 
 const app = express();
 const port = process.env.PORT;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 
 app.get("/", async (req, res) => {
   res.send("Postgres API esimerkki");
@@ -30,9 +40,11 @@ app.use("/comments", commetnsRouter);
 app.use("/auth", authRouter);
 app.use("/lists-movies", listMoviesRouter);
 app.use("/ratings", ratingsRouter);
-app.use("/groupcomments", groupCommentsRouter);
+//app.use("/favourites", favouritesRouter);
+// index.js
+app.use("/uploads", express.static("/app/uploads"));
 
-app.use("/uploads", express.static("uploads"));
+
 
 app.listen(port, () => {
   console.log(`Server is listening port ${port}`);

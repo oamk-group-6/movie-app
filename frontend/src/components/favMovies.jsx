@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import "./favMovies.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -18,14 +18,13 @@ export default function FavMovies({ userId, title = "Favourites" }) {
       return;
     }
 
-    const fetchUrl = `${API_URL}/movies?limit=15&sort=release_year_desc`;
+    const fetchUrl = `${API_URL}/movies?limit=15&userId=${userId}`;
 
     fetch(fetchUrl)
       .then(res => res.json())
       .then(data => {
         const withRatings = data.map(movie => ({
           ...movie,
-          user_rating: Math.floor(Math.random() * 11) + 90,
           rating_avg: Math.floor(Math.random() * 31) + 70
         }));
         setMovies(withRatings);
@@ -74,7 +73,6 @@ export default function FavMovies({ userId, title = "Favourites" }) {
 
   return (
     <div className="fav-movies-wrapper" onClick={handleClick}>
-      {/* Favourites-otsikko */}
       <h2 className="fav-movies-title">{title}</h2>
 
       <div className="fav-movies-container">
@@ -89,13 +87,13 @@ export default function FavMovies({ userId, title = "Favourites" }) {
             <h4>{movie.title}</h4>
             <p>{movie.release_year}</p>
 
-            {/* Alaosa: käyttäjän oma arvosana + Bananameter */}
             <div className="movie-footer">
-              {movie.user_rating !== undefined && movie.user_rating !== null && (
-                <div className="movie-user-rating">
-                  Your rating: {Math.round(movie.user_rating)}%
-                </div>
-              )}
+              <div className="movie-user-rating">
+                {movie.user_rating !== null
+                  ? `Your rating: ${Math.round(movie.user_rating)}%`
+                  : "You haven't rated this movie yet"}
+              </div>
+
               {movie.rating_avg !== undefined && movie.rating_avg !== null && (
                 <div className="movie-average-bar">
                   <div

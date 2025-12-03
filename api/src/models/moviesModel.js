@@ -1,7 +1,7 @@
 import pool from "../database.js";
 
-// Example of query from frontend: /movies?genres=Action,Comedy&yearFrom=2015&yearTo=2022&language=English&country=USA&ratingMin=7&ratingMax=9
-export async function getAllMovies(filters = {}) {
+// getAllMovies with optional userId
+export async function getAllMovies(filters = {}, userId) {
   const {
     genres,
     yearFrom,
@@ -16,60 +16,76 @@ export async function getAllMovies(filters = {}) {
 
   const params = [];
   const conditions = [];
-  let query = "SELECT * FROM movies";
 
+  // Perus SELECT
+  let query = `
+    SELECT 
+      m.*,
+      ${userId ? 'r.rating AS user_rating' : 'NULL AS user_rating'}
+    FROM movies m
+    ${userId ? 'LEFT JOIN ratings r ON m.id = r.movie_id AND r.user_id = $1' : ''}
+  `;
+
+  if (userId) params.push(userId);
+
+  // Genre
   if (genres && genres.length > 0) {
-    const genreConditions = genres.map((g, i) => {
+    const genreConditions = genres.map((g) => {
       params.push(`%${g}%`);
-      return `genre ILIKE $${params.length}`;
+      return `m.genre ILIKE $${params.length}`;
     });
     conditions.push("(" + genreConditions.join(" OR ") + ")");
   }
 
+  // Vuodet
   if (yearFrom !== undefined) {
     params.push(yearFrom);
-    conditions.push(`release_year >= $${params.length}`);
+    conditions.push(`m.release_year >= $${params.length}`);
   }
   if (yearTo !== undefined) {
     params.push(yearTo);
-    conditions.push(`release_year <= $${params.length}`);
+    conditions.push(`m.release_year <= $${params.length}`);
   }
 
+  // Language / country
   if (language) {
     params.push(`%${language}%`);
-    conditions.push(`language ILIKE $${params.length}`);
+    conditions.push(`m.language ILIKE $${params.length}`);
   }
-
   if (country) {
     params.push(`%${country}%`);
-    conditions.push(`country ILIKE $${params.length}`);
+    conditions.push(`m.country ILIKE $${params.length}`);
   }
 
+  // Rating average
   if (ratingMin !== undefined) {
     params.push(ratingMin);
-    conditions.push(`rating_avg >= $${params.length}`);
+    conditions.push(`m.rating_avg >= $${params.length}`);
   }
   if (ratingMax !== undefined) {
     params.push(ratingMax);
-    conditions.push(`rating_avg <= $${params.length}`);
+    conditions.push(`m.rating_avg <= $${params.length}`);
   }
 
   if (conditions.length > 0) {
     query += " WHERE " + conditions.join(" AND ");
   }
 
-  query += ` ORDER BY release_year DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+  // Limit & offset
   params.push(limit, offset);
+  query += ` ORDER BY m.release_year DESC LIMIT $${params.length - 1} OFFSET $${params.length}`;
 
   const result = await pool.query(query, params);
   return result.rows;
 }
 
+// getMovieById
 export async function getMovieById(id) {
   const result = await pool.query("SELECT * FROM movies WHERE id = $1", [id]);
   return result.rows[0] || null;
 }
 
+// addMovie
 export async function addMovie(movie) {
   const query = `
     INSERT INTO movies (external_id, title, original_title, release_year, genre, description, poster_url, runtime, language)
@@ -91,6 +107,7 @@ export async function addMovie(movie) {
   return result.rows[0];
 }
 
+// updateMovie
 export async function updateMovie(id, movie) {
   const query = `
     UPDATE movies
@@ -113,6 +130,7 @@ export async function updateMovie(id, movie) {
   return result.rows[0];
 }
 
+// patchMovie
 export async function patchMovie(id, fields) {
   const keys = Object.keys(fields);
   if (keys.length === 0) return null;
@@ -127,10 +145,11 @@ export async function patchMovie(id, fields) {
     RETURNING *
   `;
 
-  const result = await pool.query(query, [...values, id]);
+  const result = await pool.query([...values, id]);
   return result.rows[0];
 }
 
+// deleteMovie
 export async function deleteMovie(id) {
   const result = await pool.query("DELETE FROM movies WHERE id=$1 RETURNING *", [id]);
   return result.rows[0];
