@@ -9,7 +9,7 @@ import listsRouter from "./routers/lists.js";
 import commetnsRouter from "./routers/comments.js";
 import listMoviesRouter from "./routers/listMovies.js";
 import ratingsRouter from "./routers/ratings.js";
-
+import groupCommentsRouter from "./routers/groupComments.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -30,6 +30,7 @@ app.use("/comments", commetnsRouter);
 app.use("/auth", authRouter);
 app.use("/lists-movies", listMoviesRouter);
 app.use("/ratings", ratingsRouter);
+app.use("/groupcomments", groupCommentsRouter);
 
 app.use("/uploads", express.static("uploads"));
 

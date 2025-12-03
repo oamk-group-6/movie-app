@@ -151,3 +151,11 @@ CREATE INDEX idx_lists_group_id ON lists (owner_group_id);
 
 CREATE INDEX idx_joinreq_user ON join_requests(user_id);
 CREATE INDEX idx_joinreq_group ON join_requests(group_id);
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX idx_movies_genre_trgm ON movies USING gin(genre gin_trgm_ops);
+CREATE INDEX idx_movies_language_trgm ON movies USING gin( language gin_trgm_ops);
+CREATE INDEX idx_movies_country_trgm ON movies USING gin( country gin_trgm_ops);
+
+CREATE INDEX idx_movies_release_year ON movies(release_year);
+CREATE INDEX idx_movies_rating_avg ON movies(rating_avg);
