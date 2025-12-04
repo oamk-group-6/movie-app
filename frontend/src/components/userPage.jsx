@@ -1,21 +1,13 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FavMovies from "./favMovies";
 import SearchBar from "./searchBar";
 import ProfileSidebar from "./profileSidebar";
+import { useUserIdFromToken } from "../hooks/useUserIdFromToken";
 import "./userPage.css";
 
 export default function UserPage() {
-  const [userId, setUserId] = useState(null); // kirjautuneen käyttäjän ID
-  const [showUserView, setShowUserView] = useState(true); // ohjaa näkymän vaihtoa
-
-  // Haetaan userId localStoragesta kirjautumisen jälkeen
-  useEffect(() => {
-    const storedId = localStorage.getItem("userId");
-    if (storedId) setUserId(Number(storedId));
-  }, []);
-
-  // effectiveUserId: jos showUserView on true ja userId on olemassa, näytetään käyttäjän tiedot
+  const userId = useUserIdFromToken(); // haetaan tokenista
+  const [showUserView, setShowUserView] = useState(true);
   const effectiveUserId = showUserView && userId ? userId : null;
 
   return (
@@ -26,13 +18,10 @@ export default function UserPage() {
       </header>
 
       <div className="userpage-content">
-
-        {/* Sidebar näkyy vain jos effectiveUserId on olemassa */}
         {effectiveUserId && <ProfileSidebar userId={effectiveUserId} />}
 
         <main className="main-content">
           <div className="userpage-header">
-            {/* Nappi vaihtaa näkymää */}
             {userId && (
               <button onClick={() => setShowUserView(prev => !prev)}>
                 {showUserView ? "Näytä ei-kirjautunut" : "Näytä kirjautunut"}
