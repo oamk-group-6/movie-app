@@ -11,6 +11,15 @@ export async function registerUser(req, res, next) {
     if (!username || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
+
+    // Salasanan validointi
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        error: "Password must be at least 8 characters long and include at least one uppercase letter and one number",
+      });
+    }
+
     //Tarkistetaan onko käyttäjätunnus jo käytössä
     const existingUsername = await getUserByUsername(username);
     if (existingUsername) {
@@ -30,7 +39,7 @@ export async function registerUser(req, res, next) {
     const newUser = await addUser({
       username,
       email,
-      password: password, // tätä ei tallenneta, mutta annetaan funktiolle rakenne täydeksi
+      password,
       avatar_url: null,
       bio: null,
     });
