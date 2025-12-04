@@ -1,16 +1,22 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import FavMovies from "./favMovies";
 import SearchBar from "./searchBar";
 import ProfileSidebar from "./profileSidebar";
 import "./userPage.css";
 
 export default function UserPage() {
-  const [userId, setUserId] = useState(null); // oikea käyttäjä tai null
-  const [showMockUser, setShowMockUser] = useState(false); // nappi dev-mock
+  const [userId, setUserId] = useState(null); // kirjautuneen käyttäjän ID
+  const [showUserView, setShowUserView] = useState(true); // ohjaa näkymän vaihtoa
 
-  const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
-  // effectiveUserId välittää tiedon sekä Sidebarille että FavMoviesille
-  const effectiveUserId = userId || (isDev && showMockUser ? 1 : null);
+  // Haetaan userId localStoragesta kirjautumisen jälkeen
+  useEffect(() => {
+    const storedId = localStorage.getItem("userId");
+    if (storedId) setUserId(Number(storedId));
+  }, []);
+
+  // effectiveUserId: jos showUserView on true ja userId on olemassa, näytetään käyttäjän tiedot
+  const effectiveUserId = showUserView && userId ? userId : null;
 
   return (
     <div className="userpage">
@@ -26,9 +32,12 @@ export default function UserPage() {
 
         <main className="main-content">
           <div className="userpage-header">
-            <button onClick={() => setShowMockUser(prev => !prev)}>
-              {showMockUser ? "Näytä ei-kirjautunut" : "Näytä mock-käyttäjä"}
-            </button>
+            {/* Nappi vaihtaa näkymää */}
+            {userId && (
+              <button onClick={() => setShowUserView(prev => !prev)}>
+                {showUserView ? "Näytä ei-kirjautunut" : "Näytä kirjautunut"}
+              </button>
+            )}
           </div>
 
           {effectiveUserId ? (
@@ -36,7 +45,9 @@ export default function UserPage() {
               <FavMovies userId={effectiveUserId} limit={5} title="Your Favourite Movies" />
             </section>
           ) : (
-            <p style={{ textAlign: "center" }}>Kirjaudu nähdäksesi suosikkielokuvat</p>
+            <p style={{ textAlign: "center" }}>
+              You are not logged in yet. Please log in to access your favourite movies and profile page.
+            </p>
           )}
         </main>
       </div>

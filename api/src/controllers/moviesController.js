@@ -31,11 +31,14 @@ export const getMovies = async (req, res) => {
       offset: offset ? parseInt(offset, 10) : 0
     };
 
-    const movies = await moviesModel.getAllMovies(filters);
+    // userId optional
+    const userId = req.query.userId ? parseInt(req.query.userId, 10) : null;
+
+    const movies = await moviesModel.getAllMovies(filters, userId);
     res.json(movies);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Database error"});
+    res.status(500).json({ error: "Database error" });
   }
 };
 
