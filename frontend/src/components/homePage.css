@@ -1,5 +1,10 @@
 .home{
     background-color: black;
+
+    background-image: url("../assets/bananaBackground.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 .hotnow-title {
   margin-top: 60px; 

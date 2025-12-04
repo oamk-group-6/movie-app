@@ -66,10 +66,16 @@ export default function CreateGroupPage() {
     <div className="create-group-page">
       <header>
         <SearchBar />
-      </header>
-                   
+      </header>   
             <form onSubmit={handleSubmit} className="create-group-form">
-                <h2>Create a New Group</h2>
+                <div className="create-group-header">
+                  <i
+                    className="fa-solid fa-arrow-left"
+                    onClick={() => navigate(-1)}
+                  />
+                
+                  <h2>Create a New Group</h2>
+                </div>
 
                 <label>Group Name</label>
                 <input
