@@ -23,7 +23,9 @@ export default function Login() {
         .then(data => {
             console.log("Login response:", data);
             if (data.token) {
+                localStorage.setItem("userId", data.user.id);
                 localStorage.setItem("token", data.token);
+                
                 window.location.href = "/";   // siirry etusivulle
             } else {
                 setError(data.error || "Invalid email or password");
