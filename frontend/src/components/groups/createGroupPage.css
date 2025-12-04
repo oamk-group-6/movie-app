@@ -6,6 +6,35 @@
     height: 100vh;
     width: 100%;
     font-family: 'Source Sans 3';
+    padding-top: 100px;
+
+    background-image: url("../../assets/bananaBackground.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+.create-group-header{
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px;
+}
+.create-group-header i{
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #F4EB49;
+    background: #58330A;
+    border: solid 2px #58330A;
+    border-radius: 5px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.create-group-header i:hover{
+    border-color: #F4EB49;    
+    box-shadow: 0 0 0 0.5px #F4EB49 inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 5px;
 }
 .create-group-form{
     background: #AA671D;

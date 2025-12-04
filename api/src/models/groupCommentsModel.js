@@ -23,7 +23,18 @@ export async function addGroupComment(comment) {
         RETURNING *`,
         [user_id, group_id, content]
     );
-    return result.rows[0];
+    const inserted = result.rows[0];
+
+    //hae username mukaan
+    const userResult = await pool.query(
+        `SELECT username FROM users WHERE id = $1`,
+        [user_id]
+    );
+
+    return {
+        ...inserted,
+        username: userResult.rows[0].username
+    };
 }
 
 export async function updateGroupComment(id, comment) {
