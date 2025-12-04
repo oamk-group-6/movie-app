@@ -87,6 +87,17 @@ CREATE TABLE "ratings" (
   CONSTRAINT fk_ratings_movie FOREIGN KEY ("movie_id") REFERENCES "movies" ("id") ON DELETE CASCADE
 );
 
+-- FAVOURITES
+CREATE TABLE favourites (
+  user_id INTEGER NOT NULL,
+  movie_id INTEGER NOT NULL,
+  added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, movie_id),
+  CONSTRAINT fk_favourites_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_favourites_movie FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
+);
+
+
 -- LISTS
 CREATE TABLE "lists" (
   "id" SERIAL PRIMARY KEY,
@@ -159,3 +170,6 @@ CREATE INDEX idx_movies_country_trgm ON movies USING gin( country gin_trgm_ops);
 
 CREATE INDEX idx_movies_release_year ON movies(release_year);
 CREATE INDEX idx_movies_rating_avg ON movies(rating_avg);
+
+CREATE INDEX idx_favourites_user_id ON favourites(user_id);
+CREATE INDEX idx_favourites_movie_id ON favourites(movie_id);
