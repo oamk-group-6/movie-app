@@ -35,6 +35,33 @@
     color: black; /* kontrasti banaanille */
 }
 
+.favourite-menu {
+  background: #222;
+  border: 1px solid #555;
+  border-radius: 8px;
+  width: 230px;
+  padding: 10px;
+  justify-content: center;
+}
+
+.menu-item {
+  padding: 8px;
+  cursor: pointer;
+  color: gold;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-close {
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  color: #ccc;
+}
+
+
 .movie-detail-container {
   display: flex;
   flex-wrap: wrap;
