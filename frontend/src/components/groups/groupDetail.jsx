@@ -18,7 +18,7 @@ export default function GroupDetails() {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("")
     const [showInviteModal, setShowInviteModal] = useState(false);
-    
+    const [groupFavourites, setGroupFavourites] = useState([]);
 
 
     function getUserIdFromToken() {
@@ -62,6 +62,13 @@ export default function GroupDetails() {
         fetch(`${API_URL}/groupcomments/group/${id}`, { headers: authorizedHeader() })
             .then(res => res.json())
            .then(data => setComments(data));
+
+        // Fetch group favourites
+        fetch(`${API_URL}/groupfavourites/group/${id}`, { headers: authorizedHeader() })
+            .then(res => res.json())
+            .then(data => setGroupFavourites(data))
+            .catch(err => console.error("Failed to load group favourites:", err));
+
 
     }, [id, userId]);
 
@@ -315,7 +322,20 @@ export default function GroupDetails() {
                     <h2>Our favourites</h2>
 
                     <div className="favourites-grid">
-                        <p>Movie cards here</p>    
+                        {groupFavourites.length === 0 ? (
+                            <p>No favourites yet.</p>
+                        ) : (
+                            groupFavourites.map(movie => (
+                                <div
+                                    key={movie.id}
+                                    className="favourite-movie-card"
+                                    onClick={() => navigate(`/movies/${movie.id}`)}
+                                >
+                                    <img src={movie.poster_url} alt={movie.title} />
+                                    <p>{movie.title}</p>
+                                </div>
+                            ))
+                        )}    
                     </div>
                 </div>
 

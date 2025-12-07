@@ -14,6 +14,10 @@ export default function MovieDetail() {
     const [movie, setMovie] = useState(null);
     const [isFavourite, setIsFavourite] = useState(false);
 
+    const [userGroups, setUserGroups] = useState([]);
+    const [groupFavouriteStatus, setGroupFavouriteStatus] = useState({})
+    const [showFavouriteMenu, setShowFavouriteMenu] = useState(false);
+
     const userId = useUserIdFromToken();
 
     // Hae elokuva
@@ -36,7 +40,42 @@ export default function MovieDetail() {
             .catch(err => console.error(err));
     }, [id, userId]);
 
-    // Favourite-napin toiminto
+    // Hae käyttäjän ryhmät suosikkeihin lisäämistä varten
+    useEffect(() => {
+        if (!userId) return;
+
+        fetch(`${API_URL}/groups/my/all`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        })
+            .then(res => res.json())
+            .then(data => setUserGroups(data))
+            .catch(err => console.error("Failed to fetch groups:", err));
+    }, [userId]);
+
+    //Hae käyttäjän ryhmien suosikki-status tälle elokuvalle
+    useEffect(() => {
+        if (!userGroups.length) return;
+
+        const fetchStatuses = async () => {
+            const newStatus = {};
+
+            for (const group of userGroups) {
+                try {
+                    const res = await fetch(`${API_URL}/groupfavourites/group/${group.id}/${id}`);
+                    const data = await res.json();
+                    newStatus[group.id] = data.isFavourite;
+                } catch (err) {
+                    console.error("Failed to fetch group favourite status:", err);
+                }
+            }
+
+            setGroupFavouriteStatus(newStatus);
+        };
+
+        fetchStatuses();
+    }, [userGroups, id]);
+
+    // Lisää omiin suosikkeihin
     const toggleFavourite = async () => {
         if (!userId) return;
 
@@ -56,6 +95,38 @@ export default function MovieDetail() {
             }
         } catch (err) {
             console.error(err);
+        }
+    };
+
+    // Lisää ryhmän suosikkeihin
+    const toggleGroupFavourite = async (groupId) => {
+        const fav = groupFavouriteStatus[groupId];
+
+        try {
+            if (fav) {
+                // REMOVE
+                await fetch(`${API_URL}/groupfavourites/group/${groupId}/${id}`, {
+                    method: "DELETE"
+                });
+            } else {
+                // ADD
+                await fetch(`${API_URL}/groupfavourites/group/${groupId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        movieId: parseInt(id),
+                        userId
+                    })
+                });
+            }
+            setGroupFavouriteStatus(prev => ({
+                ...prev,
+                [groupId]: !fav
+            }));
+
+            setShowFavouriteMenu(false);
+        } catch (err) {
+            console.error("Failed to add group favourite:", err);
         }
     };
 
@@ -81,11 +152,61 @@ export default function MovieDetail() {
     <button
     type="button"
     className={`favourite-button ${isFavourite ? "favourited" : ""}`}
-    onClick={toggleFavourite}
+    onClick={() => {
+        if (userGroups.length === 0) {
+            toggleFavourite();
+        } else {
+            setShowFavouriteMenu(true);
+        }
+    }}
     title={isFavourite ? "Remove from favourites" : "Add to favourites"}
 >
     🍌
 </button>
+
+    {/* FAVOURITE MENU */}
+    {showFavouriteMenu && (
+        <div className="favourite-menu">
+            <div
+                className="menu-item"
+                onClick={() => toggleFavourite()}
+            >
+                <i className={`menu-star fa-star ${isFavourite ? "fa-solid favourite" : "fa-regular not-favourite"}`}></i>
+                {isFavourite ? "Remove from my favourites" : "Add to my favourites"}
+            </div>
+
+            {userGroups.map(group => {
+                const fav = groupFavouriteStatus[group.id];
+
+                return (
+                    <div
+                        key={group.id}
+                        className="menu-item"
+                        onClick={() => toggleGroupFavourite(group.id)}
+                    >
+                        <i
+                            className={`menu-star fa-star ${
+                                fav ? "fa-solid favourite" : "fa-regular not-favourite"
+                            }`}
+                        ></i>
+
+                        {fav
+                            ? `Remove from group: ${group.name}`
+                            : `Add to group: ${group.name}`}
+                    </div>
+                );
+            })}
+
+
+            <button
+                className="menu-close"
+                onClick={() => setShowFavouriteMenu(false)}
+            >
+                Close
+            </button>
+        </div>
+    )}
+
 
 </div>
 
