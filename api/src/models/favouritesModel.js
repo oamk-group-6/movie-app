@@ -28,7 +28,7 @@ export async function getFavouritesByUser(userId) {
         JOIN favourites f ON m.id = f.movie_id
         LEFT JOIN ratings r ON m.id = r.movie_id AND r.user_id = $1
         WHERE f.user_id = $1
-        ORDER BY f.created_at DESC;
+        ORDER BY f.added_at DESC;
 
         `,
         [userId]

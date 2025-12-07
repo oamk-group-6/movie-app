@@ -1,0 +1,46 @@
+.rating-box {
+  margin-bottom: 20px;
+  text-align: left;
+  width: 100%;
+  margin-left: 0;
+}
+
+.rating-box p {
+  margin: 5px 0;
+}
+
+.movie-bar {
+  width: 200px;
+  height: 20px;
+  background-color: #8B4513;
+  border: 2px solid #8B4513;
+  border-radius: 5px;
+  margin: 6px 0 0 0;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.movie-fill {
+  height: 100%;
+  background-color: #FFD700;
+  border-radius: 3px 0 0 3px;
+  transition: width 0.3s ease;
+}
+
+.movie-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #000;
+  white-space: nowrap;
+}
+
+.review-text {
+  padding-top: 10px;
+  min-width: 300px;
+  word-wrap: break-word;
+}

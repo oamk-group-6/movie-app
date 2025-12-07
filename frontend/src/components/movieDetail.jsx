@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchBar.jsx";
+import Reviews from "./reviews.jsx";
 import { useUserIdFromToken } from "../hooks/useUserIdFromToken";
 import "./movieDetail.css";
 
@@ -101,8 +102,12 @@ export default function MovieDetail() {
                             Review this movie
                         </button>
                     </div>
+                    <div>
+                        <Reviews />
+                    </div>
                 </div>
             </div>
+
         </div>
     );
 }

@@ -50,11 +50,20 @@ export const getMovieRatings = async (req, res) => {
     try {
         const { movieId } = req.params;
 
-        const ratings = await ratingsModel.getRatingsForMovie(movieId);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+
+        const offset = (page -1) * limit;
+
+        const ratings = await ratingsModel.getRatingsForMovie(movieId, limit, offset);
+        const totalCount = await ratingsModel.getRatingCount(movieId);
 
         res.json({
             movieId,
-            count: ratings.length,
+            page,
+            limit,
+            totalCount,
+            totalPages: Math.ceil(totalCount / limit),
             ratings
         });
     } catch (err) {
