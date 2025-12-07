@@ -252,13 +252,11 @@ export default function ProfileSidebar({ userId }) {
           />
 
           <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-            <button className="save-btn" onClick={handleSaveProfile} disabled={saving}>
-              {saving ? "Saving..." : "Save Profile"}
-            </button>
-            <button className="save-btn" onClick={() => setProfile(prev => ({ ...prev }))}>
-              Cancel Changes
-            </button>
-          </div>
+  <button className="save-btn" onClick={handleSaveProfile} disabled={saving}>
+    {saving ? "Saving..." : "Save Profile"}
+  </button>
+</div>
+
 
           {message && <p className="info-message">{message}</p>}
           {error && <p className="error-message">{error}</p>}

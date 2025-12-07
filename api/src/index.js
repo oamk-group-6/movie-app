@@ -10,7 +10,7 @@ import listsRouter from "./routers/lists.js";
 import commetnsRouter from "./routers/comments.js";
 import listMoviesRouter from "./routers/listMovies.js";
 import ratingsRouter from "./routers/ratings.js";
-//import favouritesRouter from "./routers/favourites.js";
+import favouritesRouter from "./routers/favourites.js";
 
 
 
@@ -40,7 +40,7 @@ app.use("/comments", commetnsRouter);
 app.use("/auth", authRouter);
 app.use("/lists-movies", listMoviesRouter);
 app.use("/ratings", ratingsRouter);
-//app.use("/favourites", favouritesRouter);
+app.use("/favourites", favouritesRouter);
 // index.js
 app.use("/uploads", express.static("/app/uploads"));
 

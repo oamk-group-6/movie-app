@@ -2,24 +2,61 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchBar.jsx";
+import { useUserIdFromToken } from "../hooks/useUserIdFromToken";
+import "./movieDetail.css";
 
-import "./movieDetail.css"
-
-const API_URL = process.env.REACT_APP_API_URL
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function MovieDetail() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
+    const [isFavourite, setIsFavourite] = useState(false);
 
+    const userId = useUserIdFromToken();
+
+    // Hae elokuva
     useEffect(() => {
         fetch(`${API_URL}/movies/${id}`)
             .then(res => res.json())
-            .then(data => setMovie(data));
+            .then(data => setMovie(data))
+            .catch(err => console.error(err));
     }, [id]);
 
-    console.log("API_URL:", API_URL);
+    // Hae käyttäjän suosikit ja tarkista onko tämä elokuva siellä
+    useEffect(() => {
+        if (!userId) return;
 
+        fetch(`${API_URL}/favourites/${userId}`)
+            .then(res => res.json())
+            .then(favourites => {
+                setIsFavourite(favourites.some(f => f.id === parseInt(id)));
+            })
+            .catch(err => console.error(err));
+    }, [id, userId]);
+
+    // Favourite-napin toiminto
+    const toggleFavourite = async () => {
+        if (!userId) return;
+
+        try {
+            if (isFavourite) {
+                await fetch(`${API_URL}/favourites/${userId}/${id}`, {
+                    method: "DELETE"
+                });
+                setIsFavourite(false);
+            } else {
+                await fetch(`${API_URL}/favourites`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId, movieId: parseInt(id) })
+                });
+                setIsFavourite(true);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     if (!movie) return <p>Loading...</p>;
 
@@ -33,16 +70,29 @@ export default function MovieDetail() {
                     <h2 className="movie-title">{movie.title}</h2>
                     <p>{movie.release_year} • {movie.runtime} min</p>
                     <p>{movie.genre}</p>
-                    <img
-                        className="movie-poster"
-                        src={movie.poster_url}
-                        alt={movie.title}
-                    />
+
+                    <div className="poster-container">
+    <img
+        className="movie-poster"
+        src={movie.poster_url}
+        alt={movie.title}
+    />
+    <button
+    type="button"
+    className={`favourite-button ${isFavourite ? "favourited" : ""}`}
+    onClick={toggleFavourite}
+    title={isFavourite ? "Remove from favourites" : "Add to favourites"}
+>
+    🍌
+</button>
+
+</div>
+
                 </div>
+
                 <div className="right-side">
                     <p className="movie-description">{movie.description}</p>
                     <div className="bottom-row">
-
                         <button
                             type="button"
                             className="review-button"
