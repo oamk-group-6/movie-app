@@ -16,7 +16,9 @@ export default function GroupDetails() {
     const [joinRequests, setJoinRequests] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
     const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState("")
     const [showInviteModal, setShowInviteModal] = useState(false);
+    
 
 
     function getUserIdFromToken() {
@@ -57,9 +59,9 @@ export default function GroupDetails() {
             .then(data => setMembers(data));
 
         // Fetch group comments
-        //fetch(`${API_URL}/groups/${id}/comments`)
-        //    .then(res => res.json())
-        //    .then(data => setComments(data));
+        fetch(`${API_URL}/groupcomments/group/${id}`, { headers: authorizedHeader() })
+            .then(res => res.json())
+           .then(data => setComments(data));
 
     }, [id, userId]);
 
@@ -182,6 +184,32 @@ export default function GroupDetails() {
             );
     };
 
+    //add comments handler
+    const handleAddComment = () => {
+        if(!newComment.trim()) return;
+
+        const body = {
+            user_id: userId,
+            group_id: Number(id),
+            content: newComment
+        }
+
+        fetch(`${API_URL}/groupcomments`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                ...authorizedHeader()
+            },
+            body: JSON.stringify(body)
+        })
+        .then(res => res.json())
+        .then(added => {
+            setComments(prev => [...prev, added]);
+            setNewComment("");
+        })
+        .catch(err => console.error("Comment error:", err));
+    }
+
 
     if(!group) {
         return <p>Loading group...</p>;
@@ -299,12 +327,25 @@ export default function GroupDetails() {
                         {comments.length === 0 ? (
                             <p>No comments yet.</p>
                         ) : (
-                            comments.map((c, idx) => (
-                                <p key={idx}>
+                            comments.map((c, index) => (
+                                <p key={index}>
                                     <strong>{c.username}:</strong> {c.content}
                                 </p>
                             ))
                         )}
+                    </div>
+                    <div className="add-comments">
+                        <textarea 
+                            className="comment-input"
+                            value={newComment}
+                            onChange={e => setNewComment(e.target.value)}
+                            placeholder="Write a comment...(max 75 characters)"
+                            maxLength={75}
+                        ></textarea>
+                        <button
+                            className="comment-btn"
+                            onClick={handleAddComment}
+                        >Add comment</button>
                     </div>
                 </div>
             </div>

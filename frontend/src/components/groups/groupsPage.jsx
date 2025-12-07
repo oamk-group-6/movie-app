@@ -62,13 +62,13 @@ export default function GroupsPage() {
         <div className="groups-header">
             <input 
                 className="group-search-input"
-                placeholder="Search groups by name..."
+                placeholder="Discover groups by name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
             {isLoggedIn &&(
               <button 
-                className="create-group-btn"
+                className="create-new-group-btn"
                 onClick={() => navigate("/groups/create")}
               >
                   <span className="btn-icon"><i className="fa-solid fa-plus"></i></span>

@@ -1,3 +1,40 @@
+.poster-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px; /* väli posterin ja napin välillä */
+}
+
+.movie-poster {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.favourite-button {
+    background-color: #a46318; /* ruskea, banaanin väri */
+    border: none;
+    color: white;
+    font-size: 28px; /* isompi banaani */
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    align-self: flex-start;
+}
+
+.favourite-button:hover {
+    background-color: #d58b2c; /* hieman kirkkaampi ruskea */
+    transform: scale(1.1);
+}
+
+.favourite-button.favourited {
+    background-color: yellow; /* keltainen kun lisätty suosikkeihin */
+    color: black; /* kontrasti banaanille */
+}
+
 .movie-detail-container {
   display: flex;
   flex-wrap: wrap;

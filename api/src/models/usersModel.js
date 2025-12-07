@@ -1,5 +1,7 @@
+
 import pool from "../database.js";
 import bcrypt from "bcrypt";
+
 
 export async function getAllUsers() {
   const result = await pool.query("SELECT id, username, email, avatar_url, bio, created_at FROM users");
@@ -109,5 +111,17 @@ export async function patchUser(id, fields) {
 
 export async function deleteUser(id) {
   const result = await pool.query("DELETE FROM users WHERE id=$1 RETURNING *", [id]);
+  return result.rows[0];
+}
+
+export async function updateAvatar(userId, avatarUrl) {
+  const query = `
+    UPDATE users
+    SET avatar_url = $1
+    WHERE id = $2
+    RETURNING id, username, email, avatar_url, bio, created_at;
+  `;
+  const values = [avatarUrl, userId];
+  const result = await pool.query(query, values);
   return result.rows[0];
 }

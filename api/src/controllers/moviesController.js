@@ -2,7 +2,39 @@ import * as moviesModel from "../models/moviesModel.js";
 
 export const getMovies = async (req, res) => {
   try {
-    const movies = await moviesModel.getAllMovies(req.query);
+    const {
+      genres,
+      yearFrom,
+      yearTo,
+      language,
+      country,
+      ratingMin,
+      ratingMax,
+      limit,
+      offset
+    } = req.query;
+
+    let genresArray;
+    if (genres) {
+      genresArray = Array.isArray(genres) ? genres : genres.split(",").map(g => g.trim());
+    }
+
+    const filters = {
+      genres: genresArray,
+      yearFrom: yearFrom ? parseInt(yearFrom, 10) : undefined,
+      yearTo: yearTo ? parseInt(yearTo, 10) : undefined,
+      language: language || undefined,
+      country: country || undefined,
+      ratingMin: ratingMin ? parseFloat(ratingMin) : undefined,
+      ratingMax: ratingMax ? parseFloat(ratingMax) : undefined,
+      limit: limit ? parseInt(limit, 10) : 50,
+      offset: offset ? parseInt(offset, 10) : 0
+    };
+
+    // userId optional
+    const userId = req.query.userId ? parseInt(req.query.userId, 10) : null;
+
+    const movies = await moviesModel.getAllMovies(filters, userId);
     res.json(movies);
   } catch (err) {
     console.error(err);

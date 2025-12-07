@@ -3,6 +3,11 @@
     color: white;
     min-height: 100vh;
     padding-top: 100px;
+
+    background-image: url("../../assets/bananaBackground.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .groups-header{
@@ -30,7 +35,7 @@
     color: #58330A;
 }
 
-.create-group-btn{
+.create-new-group-btn{
     grid-area: right;
     justify-self: end;
     background: #58330A;
@@ -44,7 +49,7 @@
     justify-content: center;
 }
 
-.create-group-btn:hover{
+.create-new-group-btn:hover{
     background: #58330A;
     border-color: #F4EB49;    
     box-shadow: 0 0 0 2px #F4EB49 inset;
@@ -69,4 +74,72 @@
     border-radius: 20px;
     padding: 20px;
     
+}
+
+@media (max-width: 1024px){
+    .groups-header {
+        grid-template-columns: 1fr 1fr; 
+        grid-template-areas:
+            "center right";
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .group-search-input {
+        width: 100%;
+    }
+
+    .create-new-group-btn {
+        width: 140px;
+        height: 45px;
+        justify-self: end;
+    }
+
+    .groups-content {
+        grid-template-columns: 1fr 1fr; 
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .groups-right {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 800px) {
+    .groups-header {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "center"
+            "right";
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .group-search-input {
+        width: 100%;
+        max-width: 100%;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    .create-new-group-btn {
+        width: 100%;
+        max-width: 100%;
+        height: 45px;
+        justify-self: stretch;
+        font-size: 0.95rem;
+    }
+
+    .groups-content {
+        grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .groups-left,
+    .groups-center,
+    .groups-right {
+        padding: 15px;
+    }
 }

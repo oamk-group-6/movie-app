@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import "./profileSidebar.css";
 
@@ -10,13 +11,13 @@ export default function ProfileSidebar({ userId }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false); // Uusi tila varmistukseen
 
   const [profile, setProfile] = useState({
     username: "",
-    realName: "",
     email: "",
     bio: "",
-    avatar_url: ""
+    avatar_url: "" // profiilikuva kenttä tyhjä oletuksena
   });
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -24,19 +25,8 @@ export default function ProfileSidebar({ userId }) {
 
   useEffect(() => {
     let mounted = true;
-    const fetchProfile = async () => {
-      if (!userId) {
-        setProfile(prev => ({
-          ...prev,
-          username: "mockuser",
-          realName: "John Doe",
-          email: "mock@example.com",
-          bio: "This is my bio",
-          avatar_url: ""
-        }));
-        return;
-      }
 
+    const fetchProfile = async () => {
       setLoading(true);
       setError(null);
       try {
@@ -44,12 +34,12 @@ export default function ProfileSidebar({ userId }) {
         if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
         const data = await res.json();
         if (!mounted) return;
+
         setProfile({
           username: data.username || "",
-          realName: data.real_name || data.realName || data.name || "",
           email: data.email || "",
           bio: data.bio || "",
-          avatar_url: data.avatar_url || data.avatarUrl || ""
+          avatar_url: data.avatar_url || "" // ei placeholderia
         });
       } catch (err) {
         console.error(err);
@@ -90,7 +80,7 @@ export default function ProfileSidebar({ userId }) {
         username: profile.username,
         email: profile.email,
         bio: profile.bio,
-        real_name: profile.realName
+        avatar_url: profile.avatar_url
       };
 
       const res = await fetch(`${API_URL}/users/${userId}`, {
@@ -100,14 +90,14 @@ export default function ProfileSidebar({ userId }) {
       });
 
       if (!res.ok) throw new Error(await res.text());
-
       const updated = await res.json();
+
       setProfile(prev => ({
         ...prev,
         username: updated.username || payload.username,
-        realName: updated.real_name || updated.realName || payload.real_name,
         email: updated.email || payload.email,
-        bio: updated.bio || payload.bio
+        bio: updated.bio || payload.bio,
+        avatar_url: prev.avatar_url
       }));
       setMessage("Profile saved successfully.");
     } catch (err) {
@@ -135,14 +125,14 @@ export default function ProfileSidebar({ userId }) {
       });
 
       if (!res.ok) throw new Error(await res.text());
-
       const data = await res.json();
+
       setProfile(prev => ({
         ...prev,
-        avatar_url: data.avatar_url || data.avatarUrl || prev.avatar_url
+        avatar_url: data.avatar_url // backendin palauttama kuva
       }));
-      setSelectedFile(null);
 
+      setSelectedFile(null);
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
         setPreviewUrl(null);
@@ -150,7 +140,7 @@ export default function ProfileSidebar({ userId }) {
 
       setMessage("Profile picture saved successfully.");
     } catch (err) {
-      console.error(err);
+      console.error("Upload error:", err);
       setError("Failed to upload image.");
     } finally {
       setSaving(false);
@@ -158,7 +148,30 @@ export default function ProfileSidebar({ userId }) {
     }
   };
 
-  const avatarSrc = previewUrl || profile.avatar_url || "https://via.placeholder.com/150";
+  const handleDeletePicture = async () => {
+    if (!profile.avatar_url) return;
+    setSaving(true);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const res = await fetch(`${API_URL}/users/${userId}/avatar`, { method: "DELETE" });
+      if (!res.ok) throw new Error(await res.text());
+
+      setProfile(prev => ({ ...prev, avatar_url: "" }));
+      setMessage("Profile picture deleted successfully.");
+    } catch (err) {
+      console.error("Delete picture error:", err);
+      setError("Failed to delete picture.");
+    } finally {
+      setSaving(false);
+      setConfirmDelete(false);
+      setTimeout(() => setMessage(null), 3000);
+    }
+  };
+
+  // Avatar näyttää vain, jos sitä on
+  const avatarSrc = previewUrl || (profile.avatar_url ? `${API_URL}${profile.avatar_url}` : null);
 
   return (
     <aside className="profile-sidebar">
@@ -169,13 +182,11 @@ export default function ProfileSidebar({ userId }) {
       ) : (
         <>
           <div className="profile-picture-section">
-            <img src={avatarSrc} alt="Profile" className="profile-picture" />
+            {avatarSrc && (
+              <img src={avatarSrc} alt="Profile" className="profile-picture" />
+            )}
 
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
+            <input type="file" accept="image/*" onChange={handleFileChange} />
 
             <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
               <button
@@ -186,17 +197,33 @@ export default function ProfileSidebar({ userId }) {
                 {saving ? "Saving..." : "Save Picture"}
               </button>
 
-              <button
-                className="save-btn"
-                onClick={() => {
-                  if (previewUrl) URL.revokeObjectURL(previewUrl);
-                  setPreviewUrl(null);
-                  setSelectedFile(null);
-                }}
-                disabled={!selectedFile || saving}
-              >
-                Cancel
-              </button>
+              {!confirmDelete ? (
+                <button
+                  className="save-btn"
+                  onClick={() => setConfirmDelete(true)}
+                  disabled={saving || !profile.avatar_url}
+                >
+                  Delete Picture
+                </button>
+              ) : (
+                <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                  <span>Are you sure?</span>
+                  <button
+                    className="save-btn"
+                    onClick={handleDeletePicture}
+                    disabled={saving}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    className="save-btn"
+                    onClick={() => setConfirmDelete(false)}
+                    disabled={saving}
+                  >
+                    No
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -205,14 +232,6 @@ export default function ProfileSidebar({ userId }) {
             name="username"
             placeholder="Username"
             value={profile.username}
-            onChange={handleChange}
-          />
-
-          <label>Full Name</label>
-          <input
-            name="realName"
-            placeholder="Full Name"
-            value={profile.realName}
             onChange={handleChange}
           />
 
@@ -233,29 +252,11 @@ export default function ProfileSidebar({ userId }) {
           />
 
           <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-            <button className="save-btn" onClick={handleSaveProfile} disabled={saving}>
-              {saving ? "Saving..." : "Save Profile"}
-            </button>
-            <button
-              className="save-btn"
-              onClick={() => {
-                if (userId) {
-                  setLoading(true);
-                  setTimeout(() => setLoading(false), 200);
-                } else {
-                  setProfile({
-                    username: "mockuser",
-                    realName: "John Doe",
-                    email: "mock@example.com",
-                    bio: "This is my bio",
-                    avatar_url: ""
-                  });
-                }
-              }}
-            >
-              Cancel Changes
-            </button>
-          </div>
+  <button className="save-btn" onClick={handleSaveProfile} disabled={saving}>
+    {saving ? "Saving..." : "Save Profile"}
+  </button>
+</div>
+
 
           {message && <p className="info-message">{message}</p>}
           {error && <p className="error-message">{error}</p>}
