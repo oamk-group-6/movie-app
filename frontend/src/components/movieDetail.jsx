@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchBar.jsx";
+import Reviews from "./reviews.jsx";
 
 import "./movieDetail.css"
 
@@ -17,9 +18,6 @@ export default function MovieDetail() {
             .then(res => res.json())
             .then(data => setMovie(data));
     }, [id]);
-
-    console.log("API_URL:", API_URL);
-
 
     if (!movie) return <p>Loading...</p>;
 
@@ -51,8 +49,12 @@ export default function MovieDetail() {
                             Review this movie
                         </button>
                     </div>
+                    <div>
+                        <Reviews />
+                    </div>
                 </div>
             </div>
+
         </div>
     );
 }

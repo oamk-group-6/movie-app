@@ -63,7 +63,7 @@ export async function deleteRating(userId, movieId) {
     );
 }
 
-export async function getRatingsForMovie(movieId) {
+export async function getRatingsForMovie(movieId, limit, offset) {
     const result = await pool.query(
         `
         SELECT 
@@ -76,10 +76,20 @@ export async function getRatingsForMovie(movieId) {
         FROM ratings r
         JOIN users u ON r.user_id = u.id
         WHERE r.movie_id = $1
-        ORDER BY r.created_at DESC;
+        ORDER BY r.created_at DESC
+        LIMIT $2 OFFSET $3;
         `,
-        [movieId]
+        [movieId, limit, offset]
     );
 
     return result.rows;
 }
+
+export async function getRatingCount(movieId) { 
+    const result = await pool.query(
+        `SELECT COUNT(*) FROM ratings WHERE movie_id = $1`,
+        [movieId]
+    );
+
+    return parseInt(result.rows[0].count);
+};
