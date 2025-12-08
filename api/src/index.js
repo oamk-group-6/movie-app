@@ -11,6 +11,7 @@ import commetnsRouter from "./routers/comments.js";
 import listMoviesRouter from "./routers/listMovies.js";
 import ratingsRouter from "./routers/ratings.js";
 import favouritesRouter from "./routers/favourites.js";
+import groupCommentsRouter from "./routers/groupComments.js";
 import groupFavouritesRouter from "./routers/groupFavourites.js"
 
 
@@ -42,6 +43,7 @@ app.use("/auth", authRouter);
 app.use("/lists-movies", listMoviesRouter);
 app.use("/ratings", ratingsRouter);
 app.use("/favourites", favouritesRouter);
+app.use("/groupcomments", groupCommentsRouter);
 app.use("/groupfavourites", groupFavouritesRouter)
 // index.js
 app.use("/uploads", express.static("/app/uploads"));
