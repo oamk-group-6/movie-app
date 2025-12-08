@@ -215,7 +215,25 @@ export default function GroupDetails() {
             setNewComment("");
         })
         .catch(err => console.error("Comment error:", err));
-    }
+    };
+
+    const handleDeleteGroupFavourite = (movieId) => {
+        const confirmDelete = window.confirm("Remove this movie from group favourites?");
+        if (!confirmDelete) return;
+
+        fetch(`${API_URL}/groupfavourites/group/${id}/${movieId}`, {
+            method: "DELETE",
+            headers: authorizedHeader()
+        })
+        .then(res => {
+        if (res.ok) {
+            // Poista kortti UI:sta
+            setGroupFavourites(prev =>
+                prev.filter(movie => movie.id !== movieId)
+            );
+        }
+        });
+    };
 
 
     if(!group) {
@@ -321,18 +339,30 @@ export default function GroupDetails() {
                 <div className="group-center">
                     <h2>Our favourites</h2>
 
-                    <div className="favourites-grid">
+                    <div className="group-favourites-grid">
                         {groupFavourites.length === 0 ? (
                             <p>No favourites yet.</p>
                         ) : (
                             groupFavourites.map(movie => (
                                 <div
                                     key={movie.id}
-                                    className="favourite-movie-card"
+                                    className="group-favourite-movie-card"
                                     onClick={() => navigate(`/movies/${movie.id}`)}
                                 >
                                     <img src={movie.poster_url} alt={movie.title} />
-                                    <p>{movie.title}</p>
+                                    <div className="title-and-button">
+                                        <p>{movie.title}</p>
+                                    
+                                        <button 
+                                            className="delete-group-favourite-btn"
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // estää kortin klikkauksen navigoinnin
+                                                handleDeleteGroupFavourite(movie.id);
+                                            }}
+                                        >
+                                            <i className="fa-solid fa-x" />
+                                        </button>
+                                    </div>
                                 </div>
                             ))
                         )}    

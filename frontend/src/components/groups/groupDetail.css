@@ -197,6 +197,74 @@
     gap: 10px;
 }
 
+.group-favourites-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 120px));
+    gap: 20px;
+    padding: 10px 0;
+    width: 100%;
+    justify-content: left;
+    
+}
+.group-favourite-movie-card{
+    background: #2e1a0e;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.group-favourite-movie-card:hover {
+    transform: scale(0.98);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.group-favourite-movie-card img {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #000;
+}
+
+.title-and-button {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+.title-and-button p {
+    margin: 0;
+    color: #f4eb49;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.delete-group-favourite-btn{
+    background: #F4EB49;
+    color: red;
+    border-radius: 10px;
+    min-height: 25px;
+    max-width: 35px;
+    height: auto;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+}
+.delete-group-favourite-btn:hover{
+    background: #F4EB49;
+    border-color: red;    
+    box-shadow: 0 0 0 2px red inset;
+    transition: all 0.25s ease;
+    text-shadow: black 0px 0px 3px;
+}
+
 .comments-box{
     background: white;
     color: #AA671D;
@@ -222,6 +290,7 @@
     resize: none;
     border: 2px solid #AA671D;
     outline: none;
+    color: #58330A;
 }
 .comment-input::placeholder{
     color: #AA671D;   
