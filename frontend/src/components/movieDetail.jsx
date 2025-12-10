@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchBar.jsx";
 import Reviews from "./reviews.jsx";
+import BananaMeter from "./bananameter.jsx"
 import { useUserIdFromToken } from "../hooks/useUserIdFromToken";
 import "./movieDetail.css";
 
@@ -207,8 +208,8 @@ export default function MovieDetail() {
         </div>
     )}
 
-
 </div>
+    <BananaMeter movieId={id}/>
 
                 </div>
 
