@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getUserByEmail, getUserByUsername, addUser } from "../models/usersModel.js";
+import { logout } from "../../../frontend/src/components/login/logout.jsx";
 
 
 //Käyttäjän rekisteröinti
@@ -11,15 +12,6 @@ export async function registerUser(req, res, next) {
     if (!username || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
-
-    // Salasanan validointi
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      return res.status(400).json({
-        error: "Password must be at least 8 characters long and include at least one uppercase letter and one number",
-      });
-    }
-
     //Tarkistetaan onko käyttäjätunnus jo käytössä
     const existingUsername = await getUserByUsername(username);
     if (existingUsername) {
@@ -39,7 +31,7 @@ export async function registerUser(req, res, next) {
     const newUser = await addUser({
       username,
       email,
-      password,
+      password: password, // tätä ei tallenneta, mutta annetaan funktiolle rakenne täydeksi
       avatar_url: null,
       bio: null,
     });
@@ -97,6 +89,17 @@ export async function loginUser(req, res, next) {
     });
   } catch (err) {
     console.error("Login error:", err);
+    next(err);
+  }
+}
+
+export function logoutUser(req, res, next) {
+  try {
+    // Koska JWT on stateless, logout voidaan toteuttaa client-puolella poistamalla token
+    // Tässä voidaan kuitenkin palauttaa viesti onnistuneesta logoutista
+    res.json({ message: "Logout successful" });
+  } catch (err) {
+    console.error("Logout error:", err);
     next(err);
   }
 }
