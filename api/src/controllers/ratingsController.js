@@ -71,3 +71,21 @@ export const getMovieRatings = async (req, res) => {
         res.status(500).json({ error: "Database error" });
     }
 };
+
+export const getRatingAverages = async (req, res) => {
+    try{
+        const movieId = Number(req.params.movieId);
+        if (isNaN(movieId)) return res.status(400).json({ error: "Invalid movieId" });
+
+        const avg = await ratingsModel.getRatingAvg(movieId);
+
+        return res.json({
+            movieId,
+            average: avg ?? 0
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: "Database error"});
+    }
+}

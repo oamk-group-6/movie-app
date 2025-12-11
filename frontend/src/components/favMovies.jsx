@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUserIdFromToken } from "../hooks/useUserIdFromToken";
+
+import BananaMeter from "./bananameter.jsx"
 import "./favMovies.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -35,8 +37,6 @@ export default function FavMovies({ userId, title = "Favourites" }) {
           ...movie,
           // Oma arvio backendistä
           user_rating: movie.user_rating ?? null,
-          // Satunnainen Bananameter frontendissä
-          random_bananameter: Math.floor(Math.random() * 31) + 70
         }));
         setMovies(moviesWithBananameter);
         setLoading(false);
@@ -115,16 +115,7 @@ export default function FavMovies({ userId, title = "Favourites" }) {
                   : "You haven't rated this movie yet"}
               </div>
 
-              {/* Satunnainen Bananameter */}
-              <div className="movie-average-bar">
-                <div
-                  className="movie-average-fill"
-                  style={{ width: `${movie.random_bananameter}%` }}
-                />
-                <span className="movie-average-number">
-                  Bananameter: {movie.random_bananameter}% 🍌
-                </span>
-              </div>
+              <BananaMeter movieId={movie.id} />
             </div>
           </Link>
         ))}

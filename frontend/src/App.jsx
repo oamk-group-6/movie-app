@@ -46,7 +46,6 @@ function App() {
         {/* Movie Review Page */}
         <Route path="/movies/:id/review" element={<ReviewMovie />} />
 
-
       </Routes>
     </Router>
   ) 

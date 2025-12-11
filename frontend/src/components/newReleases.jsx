@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
+import BananaMeter from "./bananameter.jsx"
 import "./newReleases.css"
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -13,12 +14,7 @@ export default function NewReleases() {
       .then(res => res.json())
       .then(data => {
         const sorted = data.sort((a, b) => b.release_year - a.release_year);
-        // Lisätään satunnainen Bananameter-arvosana
-        const withRatings = sorted.map(movie => ({
-          ...movie,
-          rating_avg: Math.floor(Math.random() * 100) + 1
-        }));
-        setMovies(withRatings);
+        setMovies(sorted);
       })
       .catch(err => console.error(err));
   }, []);
@@ -34,16 +30,7 @@ export default function NewReleases() {
           >
             <img src={movie.poster_url} alt="Movie Poster" />
 
-            {/* Bananameter */}
-            <div className="movie-average-bar">
-              <div
-                className="movie-average-fill"
-                style={{ width: `${movie.rating_avg}%` }}
-              />
-              <span className="movie-average-number">
-                Bananameter: {movie.rating_avg}%
-              </span>
-            </div>
+            <BananaMeter movieId={movie.id}/>
           </Link>
         ))}
       </div>

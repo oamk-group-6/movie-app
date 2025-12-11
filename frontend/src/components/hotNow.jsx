@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 
+import BananaMeter from "./bananameter.jsx"
 import "./hotNow.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -13,37 +14,24 @@ export default function HotNow() {
       .then(res => res.json())
       .then(data => {
         const sorted = data.sort((a, b) => b.release_year - a.release_year);
-        const withRatings = sorted.map(movie => ({
-          ...movie,
-          rating_avg: Math.floor(Math.random() * 100) + 1
-        }));
-        setMovies(withRatings);
+        setMovies(sorted);
       })
       .catch(err => console.error(err));
   }, []);
 
   return (
     <div>
-      
+
       <div className="new-releases-wrapper">
         <div className="hot-now-container">
           {movies.map(movie => (
             <Link
-            to={`/movies/${movie.id}`}
-            key={movie.id}
-            className="hot-movie-card"
+              to={`/movies/${movie.id}`}
+              key={movie.id}
+              className="hot-movie-card"
             >
               <img src={movie.poster_url} alt="Movie Poster" />
-              {/* Bananameter */}
-              <div className="movie-average-bar">
-                <div
-                  className="movie-average-fill"
-                  style={{ width: `${movie.rating_avg}%` }}
-                />
-                <span className="movie-average-number">
-                  Bananameter: {movie.rating_avg}%
-                </span>
-              </div>
+              <BananaMeter movieId={movie.id} />
             </Link>
           ))}
         </div>
