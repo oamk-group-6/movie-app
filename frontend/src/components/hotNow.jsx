@@ -10,11 +10,10 @@ export default function HotNow() {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_URL}/movies?limit=5`)
+    fetch(`${API_URL}/movies/top-rated?limit=5`)
       .then(res => res.json())
       .then(data => {
-        const sorted = data.sort((a, b) => b.release_year - a.release_year);
-        setMovies(sorted);
+        setMovies(data);
       })
       .catch(err => console.error(err));
   }, []);
