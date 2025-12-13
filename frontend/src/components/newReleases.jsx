@@ -10,11 +10,10 @@ export default function NewReleases() {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_URL}/movies?limit=30`)
+    fetch(`${API_URL}/movies/now-playing`)
       .then(res => res.json())
       .then(data => {
-        const sorted = data.sort((a, b) => b.release_year - a.release_year);
-        setMovies(sorted);
+        setMovies(data);
       })
       .catch(err => console.error(err));
   }, []);

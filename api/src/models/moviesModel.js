@@ -154,3 +154,31 @@ export async function deleteMovie(id) {
   const result = await pool.query("DELETE FROM movies WHERE id=$1 RETURNING *", [id]);
   return result.rows[0];
 }
+
+//Top rated movies
+export async function getTopRatedMovies(limit = 5) {
+  const result = await pool.query(`
+    SELECT 
+      m.*, 
+      COALESCE(AVG(r.rating), 0) AS avg_rating
+    FROM movies m
+    LEFT JOIN ratings r ON r.movie_id = m.id
+    GROUP BY m.id
+    ORDER BY avg_rating DESC
+    LIMIT $1
+  `, [limit]);
+
+  return result.rows;
+}
+
+// Now in theater movies
+export async function getNowPlayingMovies(limit = 40) {
+  const query = `
+    SELECT * FROM movies
+    WHERE in_theaters = TRUE
+    ORDER BY release_year DESC, created_at DESC
+    LIMIT $1
+  `;
+  const result = await pool.query(query, [limit]);
+  return result.rows;
+}

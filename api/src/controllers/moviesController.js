@@ -95,3 +95,27 @@ export const deleteMovie = async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 };
+
+export const getTopMovies = async (req, res) => {
+  const limit = Number(req.query.limit) || 5;
+
+  try {
+    const movies = await moviesModel.getTopRatedMovies(limit);
+    res.json(movies);
+  } catch (err){
+    console.error(err);
+    res.status(500).json({error: "Database error"});
+  }
+}
+
+export const getNowPlayingMovies = async (req, res) => {
+  try{
+    const limit = Number(req.query.limit) || 40;
+
+    const movies = await moviesModel.getNowPlayingMovies(limit);
+    res.json(movies);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: "Database error"});
+  }
+}

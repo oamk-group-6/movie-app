@@ -14,12 +14,12 @@ export default function HomePage() {
 
       
       <section>
-  <h2 className="hotnow-title">Hot Now!</h2>
+  <h2 className="hotnow-title">Top Picks!</h2>
   <HotNow />
 </section>
 
 <section>
-  <h2>New Releases</h2>
+  <h2>Now In Theaters</h2>
   <NewReleases />
 </section>
 
