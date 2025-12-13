@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getUserByEmail, getUserByUsername, addUser } from "../models/usersModel.js";
-import { logout } from "../../../frontend/src/components/login/logout.jsx";
 
 
 //Käyttäjän rekisteröinti

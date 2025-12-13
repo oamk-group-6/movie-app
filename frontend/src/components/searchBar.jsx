@@ -2,13 +2,14 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import "./searchBar.css"
 import ProfileSidebar from "./profileSidebar";
-import { logout } from './login/logout.jsx';
+//import { logout } from './login/logout.jsx';
 
 const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
 const avatarSrc = "/default-avatar.png"; // Vaihda tähän käyttäjän profiilikuvan lähde tarvittaessa
 
 export default function SearchBar() {
+    const navigate = useNavigate();
     return (
         <div className="search-bar-container">
             <img src="/search-icon.png" alt="Search Icon" style={{ width: 20, height: 20, verticalAlign: 'middle', marginRight: 8 }} />
@@ -36,7 +37,7 @@ export default function SearchBar() {
                     <button type="button" className="profile-button" onClick={() => navigate('/UserPage')}>
  <img src={avatarSrc} alt="Profile"/>
 </button>
-<button className="button" onClick={logout}>Log out</button>           
+<button className="button" /*onClick={logout}*/>Log out</button>           
 
                     </div>
             )}
