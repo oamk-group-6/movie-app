@@ -27,6 +27,7 @@
 
 .search-bar {
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .navbar{
@@ -46,3 +47,67 @@
     flex-direction: column;
 }
 
+.right-section{
+    display: flex;
+    flex-direction: column;
+}
+
+.button{
+    background-color: #583308;
+    color: #F4EB49;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    align-items: center;
+    width: 120px;
+    height: 15px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.part {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-button {
+    border-radius: 5px;
+border: 1px solid #000;
+padding: 10px 20px;
+background: yellow;
+font-size: 2em;
+cursor: pointer;
+}
+
+ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: 200px;
+    margin-right: 200px;
+  list-style-type: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+ul li {
+  float: left;
+}
+
+ul li a {
+  display: flex;
+  background-color: #583308;
+  color: #F4EB49;
+  padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    align-items: center;
+    width: 60px;
+    height: 15px;
+  text-decoration: none;
+}
+
+ul li a:hover {
+  background-color: #111111;
+}
