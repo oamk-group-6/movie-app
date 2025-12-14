@@ -1,5 +1,4 @@
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./profileSidebar.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -11,13 +10,16 @@ export default function ProfileSidebar({ userId }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
-  const [confirmDelete, setConfirmDelete] = useState(false); // Uusi tila varmistukseen
+
+  const [confirmDeletePicture, setConfirmDeletePicture] = useState(false);
+  const [confirmDeleteAccount, setConfirmDeleteAccount] = useState(false);
+  const deleteTimeout = useRef(null);
 
   const [profile, setProfile] = useState({
     username: "",
     email: "",
     bio: "",
-    avatar_url: "" // profiilikuva kenttä tyhjä oletuksena
+    avatar_url: ""
   });
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -39,7 +41,7 @@ export default function ProfileSidebar({ userId }) {
           username: data.username || "",
           email: data.email || "",
           bio: data.bio || "",
-          avatar_url: data.avatar_url || "" // ei placeholderia
+          avatar_url: data.avatar_url || ""
         });
       } catch (err) {
         console.error(err);
@@ -127,10 +129,7 @@ export default function ProfileSidebar({ userId }) {
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
 
-      setProfile(prev => ({
-        ...prev,
-        avatar_url: data.avatar_url // backendin palauttama kuva
-      }));
+      setProfile(prev => ({ ...prev, avatar_url: data.avatar_url }));
 
       setSelectedFile(null);
       if (previewUrl) {
@@ -165,12 +164,43 @@ export default function ProfileSidebar({ userId }) {
       setError("Failed to delete picture.");
     } finally {
       setSaving(false);
-      setConfirmDelete(false);
+      setConfirmDeletePicture(false);
       setTimeout(() => setMessage(null), 3000);
     }
   };
 
-  // Avatar näyttää vain, jos sitä on
+  const handleDeleteAccount = async () => {
+  if (!userId) return setError("No user logged in");
+
+  setSaving(true);
+  setError(null);
+
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`${API_URL}/users/${userId}`, {  
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || "Failed to delete account");
+    }
+
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  } catch (err) {
+    console.error(err);
+    setError("Failed to delete account: " + err.message);
+  } finally {
+    setSaving(false);
+    setConfirmDeleteAccount(false);
+    clearTimeout(deleteTimeout.current);
+  }
+};
+
   const avatarSrc = previewUrl || (profile.avatar_url ? `${API_URL}${profile.avatar_url}` : null);
 
   return (
@@ -182,9 +212,7 @@ export default function ProfileSidebar({ userId }) {
       ) : (
         <>
           <div className="profile-picture-section">
-            {avatarSrc && (
-              <img src={avatarSrc} alt="Profile" className="profile-picture" />
-            )}
+            {avatarSrc && <img src={avatarSrc} alt="Profile" className="profile-picture" />}
 
             <input type="file" accept="image/*" onChange={handleFileChange} />
 
@@ -197,10 +225,10 @@ export default function ProfileSidebar({ userId }) {
                 {saving ? "Saving..." : "Save Picture"}
               </button>
 
-              {!confirmDelete ? (
+              {!confirmDeletePicture ? (
                 <button
                   className="save-btn"
-                  onClick={() => setConfirmDelete(true)}
+                  onClick={() => setConfirmDeletePicture(true)}
                   disabled={saving || !profile.avatar_url}
                 >
                   Delete Picture
@@ -217,7 +245,7 @@ export default function ProfileSidebar({ userId }) {
                   </button>
                   <button
                     className="save-btn"
-                    onClick={() => setConfirmDelete(false)}
+                    onClick={() => setConfirmDeletePicture(false)}
                     disabled={saving}
                   >
                     No
@@ -252,11 +280,48 @@ export default function ProfileSidebar({ userId }) {
           />
 
           <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-  <button className="save-btn" onClick={handleSaveProfile} disabled={saving}>
-    {saving ? "Saving..." : "Save Profile"}
-  </button>
-</div>
+            <button className="save-btn" onClick={handleSaveProfile} disabled={saving}>
+              {saving ? "Saving..." : "Save Profile"}
+            </button>
+          </div>
 
+          {/* Delete Account */}
+          <div style={{ marginTop: "2rem" }}>
+            {!confirmDeleteAccount ? (
+              <button
+                className="save-btn"
+                style={{ backgroundColor: "red", color: "white" }}
+                onClick={() => setConfirmDeleteAccount(true)}
+                disabled={saving}
+              >
+                Delete Account
+              </button>
+            ) : (
+              <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                <span style={{ textAlign: "center" }}>
+      This will permanently delete your account <strong>and all associated data. </strong> 
+      This action cannot be undone.
+    </span>
+                <button
+                  className="save-btn"
+                  disabled={saving}
+                  onMouseDown={() => deleteTimeout.current = setTimeout(handleDeleteAccount, 3000)}
+                  onMouseUp={() => clearTimeout(deleteTimeout.current)}
+                  onMouseLeave={() => clearTimeout(deleteTimeout.current)}
+                  style={{ backgroundColor: "red", color: "white" }}
+                >
+                  Hold 3 seconds to delete
+                </button>
+                <button
+                  className="save-btn"
+                  onClick={() => setConfirmDeleteAccount(false)}
+                  disabled={saving}
+                >
+                  No
+                </button>
+              </div>
+            )}
+          </div>
 
           {message && <p className="info-message">{message}</p>}
           {error && <p className="error-message">{error}</p>}
