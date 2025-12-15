@@ -38,7 +38,7 @@ function BananaMeter({ value, onChange }) {
 }
 
 export default function MovieDetail() {
-    const isLoggedIn = localStorage.getItem("token");
+    const isLoggedIn = sessionStorage.getItem("token");
     const navigate = useNavigate();
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
