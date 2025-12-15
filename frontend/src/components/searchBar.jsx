@@ -9,14 +9,15 @@ const token = localStorage.getItem("token");
 const avatarSrc = "/default-avatar.png"; // Vaihda tähän käyttäjän profiilikuvan lähde tarvittaessa
 
 export default function SearchBar() {
+    const navigate = useNavigate();
     return (
         <div className="search-bar-container">
             <img src="/search-icon.png" alt="Search Icon" style={{ width: 20, height: 20, verticalAlign: 'middle', marginRight: 8 }} />
             <div className="middle-section">
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="UserPage">UserPage</a></li>
-                    <li><a href="Groups">Groups</a></li>
+                    <li><a href="/UserPage">UserPage</a></li>
+                    <li><a href="/Groups">Groups</a></li>
                 </ul>
                 <div className="search-bar">
                     <input type="text" placeholder="Search..." />
