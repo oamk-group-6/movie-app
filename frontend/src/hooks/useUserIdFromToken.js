@@ -4,7 +4,7 @@ export function useUserIdFromToken() {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // jwt-token localStoragesta
+    const token = sessionStorage.getItem("token"); // jwt-token sessionStoragesta
     if (!token) return;
 
     try {

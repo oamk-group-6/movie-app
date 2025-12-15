@@ -22,7 +22,7 @@ export default function GroupDetails() {
 
 
     function getUserIdFromToken() {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) return null;
 
         try {
@@ -36,7 +36,7 @@ export default function GroupDetails() {
     const userId = getUserIdFromToken();
 
     function authorizedHeader() {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) return {};
         return { Authorization: `Bearer ${token}` };
     }
@@ -254,7 +254,7 @@ export default function GroupDetails() {
             
             <div className="group-details-content">    
                 {/* LEFT COLUMN */}
-                <div className="group-left">
+                <div className="group-details-left">
                     <h2>{group.name}</h2>
 
                     <img 
@@ -276,7 +276,7 @@ export default function GroupDetails() {
                     </div>
 
 
-                    <ul className="member-list">
+                    <div className="member-list">
                         {members.map(m => (
                         <li key={m.id}>
                             {m.username} {m.role === "owner" && "(owner)"}
@@ -289,13 +289,13 @@ export default function GroupDetails() {
                             )}
                         </li>
                         ))}
-                    </ul>
+                    </div>
 
                     {isOwner && (
                         <div>
                             <h3>Join Requests</h3>
 
-                            <ul className="invite-list">
+                            <div className="invite-list">
                                 {joinRequests.length === 0 && <p>No pending requests.</p>}
 
                                 {joinRequests.map(req => (
@@ -317,7 +317,7 @@ export default function GroupDetails() {
                                         </div>
                                     </li>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     )}
 

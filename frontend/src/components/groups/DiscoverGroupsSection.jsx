@@ -5,7 +5,7 @@ import './DiscoverGroupsSection.css';
 const API_URL = process.env.REACT_APP_API_URL;
 
 function authorizedHeader() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return {};
     return { Authorization: `Bearer ${token}` };
 }
