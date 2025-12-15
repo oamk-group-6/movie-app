@@ -87,6 +87,7 @@
   flex-direction: column;
   align-items: flex-start;
   min-width: 250px;
+  padding-top: 50px;
 }
 
 .movie-title {
@@ -138,6 +139,7 @@
     align-items: center;
     gap: 20px;
     padding: 20px;
+    padding-top: 100px;
   }
 
   .left-side,
@@ -146,6 +148,7 @@
     max-width: 500px;
     text-align: center;
     align-items: center;
+    padding-top: 20px;
   }
 
   .right-side {
@@ -177,3 +180,4 @@
     text-align: left;
   }
 }
+
