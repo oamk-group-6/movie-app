@@ -134,7 +134,7 @@ export default function MovieDetail() {
     if (!movie) return <p>Loading...</p>;
 
     return (
-        <div>
+        <div className="movie-detail-page">
             <header>
                 <SearchBar />
             </header>
