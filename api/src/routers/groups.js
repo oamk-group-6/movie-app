@@ -43,9 +43,9 @@ const upload = multer({ storage });
 router.get("/", getGroups);
 router.get("/:id", getGroupById);
 router.post("/", auth, upload.single("avatar"), createGroup);
-router.put("/:id", updateGroup);
-router.patch("/:id", patchGroup);
-router.delete("/:id", deleteGroup);
+router.put("/:id", auth,updateGroup);
+router.patch("/:id", auth,patchGroup);
+router.delete("/:id", auth,deleteGroup);
 
 
 router.get("/my/all", auth, getMyGroups);                  // My Groups
