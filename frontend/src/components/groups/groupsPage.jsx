@@ -18,7 +18,7 @@ export default function GroupsPage() {
 
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const isLoggedIn = !!token;
 
   useEffect(() => {
@@ -113,7 +113,7 @@ export default function GroupsPage() {
 }
 
 function authorizedHeader() {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   if (!token) return {};
   return { Authorization: `Bearer ${token}` };
 }

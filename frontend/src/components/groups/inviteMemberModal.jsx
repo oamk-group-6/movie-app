@@ -11,7 +11,7 @@ export default function InviteMemberModal({ onClose, onInvite, members, ownerId 
     const [success, setSuccess] = useState("");
 
     function authorizedHeader() {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) return {};
         return { Authorization: `Bearer ${token}` };
     }

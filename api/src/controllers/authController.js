@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getUserByEmail, getUserByUsername, addUser } from "../models/usersModel.js";
-import { logout } from "../../../frontend/src/components/login/logout.jsx";
+//import { logout } from "../../../frontend/src/components/login/logout.jsx";
 
 
 //Käyttäjän rekisteröinti
@@ -75,7 +75,7 @@ export async function loginUser(req, res, next) {
     const token = jwt.sign(
       { userId: user.id, email: user.email, username: user.username },
       process.env.JWT_SECRET || "supersecretkey",
-      { expiresIn: "2h" }
+      //{ expiresIn: "2h" }
     );
 
     res.json({

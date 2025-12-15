@@ -18,7 +18,7 @@ export default function CreateGroupPage() {
   const [success, setSuccess] = useState("");
 
   function authorizedHeader() {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return {};
       return { Authorization: `Bearer ${token}` };
   }
