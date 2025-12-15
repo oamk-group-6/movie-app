@@ -23,7 +23,7 @@ export default function Login() {
         .then(data => {
             console.log("Login response:", data);
             if (data.token) {
-                localStorage.setItem("token", data.token);
+                sessionStorage.setItem("token", data.token);
                 
                 window.location.href = "/";   // siirry etusivulle
             } else {

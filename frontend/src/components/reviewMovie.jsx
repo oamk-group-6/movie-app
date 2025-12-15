@@ -38,7 +38,7 @@ function BananaMeter({ value, onChange }) {
 }
 
 export default function MovieDetail() {
-    const isLoggedIn = localStorage.getItem("token");
+    const isLoggedIn = sessionStorage.getItem("token");
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
     const [rating, setRating] = useState(50);
@@ -75,7 +75,7 @@ export default function MovieDetail() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
                 },
                 body: JSON.stringify(reviewData)
             });

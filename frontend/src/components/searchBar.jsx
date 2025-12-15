@@ -4,7 +4,7 @@ import "./searchBar.css"
 import ProfileSidebar from "./profileSidebar";
 import { logout } from './login/logout.jsx';
 
-const token = localStorage.getItem("token");
+const token = sessionStorage.getItem("token");
   const isLoggedIn = !!token;
 const avatarSrc = "/default-avatar.png"; // Vaihda tähän käyttäjän profiilikuvan lähde tarvittaessa
 

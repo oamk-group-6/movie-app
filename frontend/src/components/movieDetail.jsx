@@ -46,7 +46,7 @@ export default function MovieDetail() {
         if (!userId) return;
 
         fetch(`${API_URL}/groups/my/all`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
         })
             .then(res => res.json())
             .then(data => setUserGroups(data))
