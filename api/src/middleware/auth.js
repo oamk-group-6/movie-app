@@ -14,7 +14,11 @@ export function auth(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "supersecretkey");
-    req.user = decoded;
+    req.user = {
+      userId: decoded.userId,
+      email: decoded.email,
+      username: decoded.username
+    };
     next();
   } catch (err) {
     console.error("Invalid token:", err.message);

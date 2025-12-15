@@ -21,6 +21,12 @@ export default function MovieDetail() {
 
     const userId = useUserIdFromToken();
 
+    function authorizedHeader() {
+        const token = sessionStorage.getItem("token");
+        if (!token) return {};
+        return { Authorization: `Bearer ${token}` };
+    }
+
     // Hae elokuva
     useEffect(() => {
         fetch(`${API_URL}/movies/${id}`)
@@ -45,9 +51,9 @@ export default function MovieDetail() {
     useEffect(() => {
         if (!userId) return;
 
-        fetch(`${API_URL}/groups/my/all`, {
-            headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
-        })
+        fetch(`${API_URL}/groups/my/all`, 
+            {headers: authorizedHeader()}
+        )
             .then(res => res.json())
             .then(data => setUserGroups(data))
             .catch(err => console.error("Failed to fetch groups:", err));
@@ -62,7 +68,9 @@ export default function MovieDetail() {
 
             for (const group of userGroups) {
                 try {
-                    const res = await fetch(`${API_URL}/groupfavourites/group/${group.id}/${id}`);
+                    const res = await fetch(`${API_URL}/groupfavourites/group/${group.id}/${id}`,
+                        {headers: authorizedHeader()}
+                    );
                     const data = await res.json();
                     newStatus[group.id] = data.isFavourite;
                 } catch (err) {
@@ -107,16 +115,18 @@ export default function MovieDetail() {
             if (fav) {
                 // REMOVE
                 await fetch(`${API_URL}/groupfavourites/group/${groupId}/${id}`, {
-                    method: "DELETE"
+                    method: "DELETE",
+                    headers: authorizedHeader()
                 });
             } else {
                 // ADD
                 await fetch(`${API_URL}/groupfavourites/group/${groupId}`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json",
+                        ...authorizedHeader()
+                    },
                     body: JSON.stringify({
-                        movieId: parseInt(id),
-                        userId
+                        movieId: parseInt(id)
                     })
                 });
             }

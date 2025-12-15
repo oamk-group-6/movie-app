@@ -50,6 +50,18 @@ export const createGroup = async (req, res) => {
 
 export const updateGroup = async (req, res) => {
   try {
+    const requesterId = req.user.userId;
+    const groupId = req.params.id;
+
+    const group = await groupsModel.getGroupById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    if (group.owner_id !== requesterId) {
+      return res.status(403).json({ error: "Only the owner can update group." });
+    }
+
     const updatedGroup = await groupsModel.updateGroup(req.params.id, req.body);
     if (!updatedGroup) return res.status(404).json({ error: "Group not found" });
     res.json(updatedGroup);
@@ -61,6 +73,18 @@ export const updateGroup = async (req, res) => {
 
 export const patchGroup = async (req, res) => {
   try {
+    const requesterId = req.user.userId;
+    const groupId = req.params.id;
+
+    const group = await groupsModel.getGroupById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    if (group.owner_id !== requesterId) {
+      return res.status(403).json({ error: "Only the owner can update group." });
+    }
+    
     const updated = await groupsModel.patchGroup(req.params.id, req.body);
     if (!updated) return res.status(404).json({ error: "Group not found or no fields provided" });
     res.json(updated);
@@ -72,7 +96,20 @@ export const patchGroup = async (req, res) => {
 
 export const deleteGroup = async (req, res) => {
   try {
-    const deletedGroup = await groupsModel.deleteGroup(req.params.id);
+    const userId = req.user.userId;
+    const groupId = req.params.id;
+
+    const group = await groupsModel.getGroupById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    if (group.owner_id !== userId) {
+      return res.status(403).json({ error: "Only the owner can delete the group" });
+    }
+
+    const deletedGroup = await groupsModel.deleteGroup(groupId);
+    
     if (!deletedGroup) return res.status(404).json({ error: "Group not found" });
     res.json({ message: "Group deleted", group: deletedGroup });
   } catch (err) {
@@ -239,10 +276,19 @@ export const declineInvitation = async (req, res) => {
 
 export const removeMember = async (req, res) => {
   try {
+    const requesterId = req.user.userId;
     const { groupId, userId } = req.params;
 
     // owneria ei saa poistaa
     const group = await groupsModel.getGroupById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    if (group.owner_id !== requesterId) {
+      return res.status(403).json({ error: "Only the owner can remove members" });
+    }
+    
     if (group.owner_id == userId) {
       return res.status(400).json({ error: "Cannot remove the group owner" });
     }

@@ -280,6 +280,24 @@
     padding: 3px;
     margin-bottom: 10px;
     width: calc(100%-20px);
+    padding-right: 6px;
+    max-height: 700px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.comments-box::-webkit-scrollbar {
+    width: 10px;
+}
+.comments-box::-webkit-scrollbar-track {
+    background: #58330A;
+    border-radius: 10px;
+}
+
+.comments-box::-webkit-scrollbar-thumb {
+    background-color: #F4EB49;
+    border-radius: 10px;
+    border: 1px solid #58330A;
 }
 .add-comments{
     display: flex;

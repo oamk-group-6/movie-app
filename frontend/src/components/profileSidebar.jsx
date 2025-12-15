@@ -176,7 +176,7 @@ export default function ProfileSidebar({ userId }) {
   setError(null);
 
   try {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const res = await fetch(`${API_URL}/users/${userId}`, {  
       method: "DELETE",
       headers: {
@@ -189,7 +189,7 @@ export default function ProfileSidebar({ userId }) {
       throw new Error(data.error || "Failed to delete account");
     }
 
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     window.location.href = "/";
   } catch (err) {
     console.error(err);
