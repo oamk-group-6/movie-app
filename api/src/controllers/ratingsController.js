@@ -9,6 +9,23 @@ export const rateMovie = async (req, res) => {
             return res.status(400).json({ error: "Rating must be between 0 and 100" });
         }
 
+        if (!Number.isInteger(movieId)) {
+            return res.status(400).json({ error: "Invalid movieId" });
+        }
+
+        if (typeof rating !== "number" || rating < 0 || rating > 100) {
+            return res.status(400).json({ error: "Invalid rating" });
+        }
+
+        if (typeof review !== "string" || review.trim().length === 0) {
+            return res.status(400).json({ error: "Review cannot be empty" });
+        }
+
+        if (review.length > 1000) {
+            return res.status(400).json({ error: "Review too long" });
+        }
+
+
         const userRating = await ratingsModel.upsertRating(userId, movieId, rating, review);
         res.status(201).json({ message: "Rating saved", rating: userRating });
     } catch (err) {
@@ -16,7 +33,6 @@ export const rateMovie = async (req, res) => {
         res.status(500).json({ error: "Database error" });
     }
 };
-
 
 export const getUserRating = async (req, res) => {
     try {
@@ -39,10 +55,10 @@ export const deleteUserRating = async (req, res) => {
         const { movieId } = req.params;
 
         await ratingsModel.deleteRating(userId, movieId);
-        res.json({message: "Rating deleted"});
+        res.json({ message: "Rating deleted" });
     } catch (err) {
         console.error(err);
-        res.status(500).json({error: "Database error"});
+        res.status(500).json({ error: "Database error" });
     }
 };
 
@@ -53,7 +69,7 @@ export const getMovieRatings = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 5;
 
-        const offset = (page -1) * limit;
+        const offset = (page - 1) * limit;
 
         const ratings = await ratingsModel.getRatingsForMovie(movieId, limit, offset);
         const totalCount = await ratingsModel.getRatingCount(movieId);
@@ -73,7 +89,7 @@ export const getMovieRatings = async (req, res) => {
 };
 
 export const getRatingAverages = async (req, res) => {
-    try{
+    try {
         const movieId = Number(req.params.movieId);
         if (isNaN(movieId)) return res.status(400).json({ error: "Invalid movieId" });
 
@@ -86,6 +102,6 @@ export const getRatingAverages = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({error: "Database error"});
+        res.status(500).json({ error: "Database error" });
     }
 }

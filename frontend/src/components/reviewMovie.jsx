@@ -37,7 +37,7 @@ function BananaMeter({ value, onChange }) {
     );
 }
 
-export default function MovieDetail() {
+export default function reviewMovie() {
     const isLoggedIn = sessionStorage.getItem("token");
     const navigate = useNavigate();
     const { id } = useParams();
@@ -118,7 +118,7 @@ export default function MovieDetail() {
                         <textarea
                             className="review-box"
                             name="review"
-                            placeholder="Write your review here..."
+                            placeholder="Write your review here...(max 1000 characters)"
                             value={reviewText}
                             onChange={e => setReviewText(e.target.value)}
                         />
