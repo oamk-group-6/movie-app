@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import SearchBar from "./searchBar.jsx";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import "./reviewMovie.css"
 
@@ -37,8 +37,9 @@ function BananaMeter({ value, onChange }) {
     );
 }
 
-export default function MovieDetail() {
-    const isLoggedIn = localStorage.getItem("token");
+export default function reviewMovie() {
+    const isLoggedIn = sessionStorage.getItem("token");
+    const navigate = useNavigate();
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
     const [rating, setRating] = useState(50);
@@ -75,7 +76,7 @@ export default function MovieDetail() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
                 },
                 body: JSON.stringify(reviewData)
             });
@@ -85,6 +86,8 @@ export default function MovieDetail() {
             alert("Review submitted!");
             setReviewText("");
             setRating(50);
+
+            navigate(`/movies/${id}`);
 
         } catch (err) {
             console.error(err);
@@ -115,7 +118,7 @@ export default function MovieDetail() {
                         <textarea
                             className="review-box"
                             name="review"
-                            placeholder="Write your review here..."
+                            placeholder="Write your review here...(max 1000 characters)"
                             value={reviewText}
                             onChange={e => setReviewText(e.target.value)}
                         />

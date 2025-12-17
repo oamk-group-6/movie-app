@@ -5,11 +5,15 @@ import {
   createMovie, 
   updateMovie, 
   deleteMovie,
-  patchMovie 
+  patchMovie,
+  getTopMovies,
+  getNowPlayingMovies
 } from "../controllers/moviesController.js";
 
 const router = express.Router();
 
+router.get("/top-rated", getTopMovies);
+router.get("/now-playing", getNowPlayingMovies);
 router.get("/", getMovies);
 router.get("/:id", getMovieById);
 router.post("/", createMovie);

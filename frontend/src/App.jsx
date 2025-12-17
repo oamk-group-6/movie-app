@@ -36,7 +36,6 @@ function App() {
         {/* Group Details */}
         <Route path="/groups/:id" element={<GroupDetails />} />
 
-
         {/**User page */}
         <Route path="/userpage" element={<UserPage />} />
 
@@ -48,7 +47,6 @@ function App() {
 
         {/* Search Results Page */}
         <Route path="/results" element={<ResultsPage />} />
-
 
       </Routes>
     </Router>

@@ -93,3 +93,16 @@ export async function getRatingCount(movieId) {
 
     return parseInt(result.rows[0].count);
 };
+
+export async function getRatingAvg(movieId) {
+    const result = await pool.query(
+        `
+        SELECT AVG(rating) AS rating_avg
+        FROM ratings
+        WHERE movie_id = $1
+        `,
+        [movieId]
+    )
+
+    return result.rows[0].rating_avg
+}

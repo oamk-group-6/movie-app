@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SearchBar from "../searchBar";
 import InviteMemberModal from "./inviteMemberModal";
@@ -19,10 +19,11 @@ export default function GroupDetails() {
     const [newComment, setNewComment] = useState("")
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [groupFavourites, setGroupFavourites] = useState([]);
+    const commentsEndRef = useRef(null);
 
-
+    //HUOM!! vain UI:ta varten
     function getUserIdFromToken() {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) return null;
 
         try {
@@ -36,7 +37,7 @@ export default function GroupDetails() {
     const userId = getUserIdFromToken();
 
     function authorizedHeader() {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) return {};
         return { Authorization: `Bearer ${token}` };
     }
@@ -82,6 +83,15 @@ export default function GroupDetails() {
             .catch(err => console.error("Join request error:", err));
 
     }, [isOwner, id]);
+
+    //Auto-scroll for comments
+    useEffect(() => {
+    if (commentsEndRef.current) {
+        commentsEndRef.current.scrollTop =
+            commentsEndRef.current.scrollHeight;
+    }
+    }, [comments]);
+
 
     //Leave group for non-owners
     const handleLeaveGroup = () => {
@@ -196,7 +206,6 @@ export default function GroupDetails() {
         if(!newComment.trim()) return;
 
         const body = {
-            user_id: userId,
             group_id: Number(id),
             content: newComment
         }
@@ -254,7 +263,7 @@ export default function GroupDetails() {
             
             <div className="group-details-content">    
                 {/* LEFT COLUMN */}
-                <div className="group-left">
+                <div className="group-details-left">
                     <h2>{group.name}</h2>
 
                     <img 
@@ -276,7 +285,7 @@ export default function GroupDetails() {
                     </div>
 
 
-                    <ul className="member-list">
+                    <div className="member-list">
                         {members.map(m => (
                         <li key={m.id}>
                             {m.username} {m.role === "owner" && "(owner)"}
@@ -289,13 +298,13 @@ export default function GroupDetails() {
                             )}
                         </li>
                         ))}
-                    </ul>
+                    </div>
 
                     {isOwner && (
                         <div>
                             <h3>Join Requests</h3>
 
-                            <ul className="invite-list">
+                            <div className="invite-list">
                                 {joinRequests.length === 0 && <p>No pending requests.</p>}
 
                                 {joinRequests.map(req => (
@@ -317,7 +326,7 @@ export default function GroupDetails() {
                                         </div>
                                     </li>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     )}
 
@@ -373,7 +382,7 @@ export default function GroupDetails() {
                 <div className="group-right">
                     <h2>Comments</h2>
 
-                    <div className="comments-box">
+                    <div className="comments-box" ref={commentsEndRef}>
                         {comments.length === 0 ? (
                             <p>No comments yet.</p>
                         ) : (

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchBar.jsx";
 import Reviews from "./reviews.jsx";
+import BananaMeter from "./bananameter.jsx"
 import { useUserIdFromToken } from "../hooks/useUserIdFromToken";
 import "./movieDetail.css";
 
@@ -19,6 +20,12 @@ export default function MovieDetail() {
     const [showFavouriteMenu, setShowFavouriteMenu] = useState(false);
 
     const userId = useUserIdFromToken();
+
+    function authorizedHeader() {
+        const token = sessionStorage.getItem("token");
+        if (!token) return {};
+        return { Authorization: `Bearer ${token}` };
+    }
 
     // Hae elokuva
     useEffect(() => {
@@ -44,9 +51,9 @@ export default function MovieDetail() {
     useEffect(() => {
         if (!userId) return;
 
-        fetch(`${API_URL}/groups/my/all`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        })
+        fetch(`${API_URL}/groups/my/all`, 
+            {headers: authorizedHeader()}
+        )
             .then(res => res.json())
             .then(data => setUserGroups(data))
             .catch(err => console.error("Failed to fetch groups:", err));
@@ -61,7 +68,9 @@ export default function MovieDetail() {
 
             for (const group of userGroups) {
                 try {
-                    const res = await fetch(`${API_URL}/groupfavourites/group/${group.id}/${id}`);
+                    const res = await fetch(`${API_URL}/groupfavourites/group/${group.id}/${id}`,
+                        {headers: authorizedHeader()}
+                    );
                     const data = await res.json();
                     newStatus[group.id] = data.isFavourite;
                 } catch (err) {
@@ -106,16 +115,18 @@ export default function MovieDetail() {
             if (fav) {
                 // REMOVE
                 await fetch(`${API_URL}/groupfavourites/group/${groupId}/${id}`, {
-                    method: "DELETE"
+                    method: "DELETE",
+                    headers: authorizedHeader()
                 });
             } else {
                 // ADD
                 await fetch(`${API_URL}/groupfavourites/group/${groupId}`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json",
+                        ...authorizedHeader()
+                    },
                     body: JSON.stringify({
-                        movieId: parseInt(id),
-                        userId
+                        movieId: parseInt(id)
                     })
                 });
             }
@@ -133,7 +144,7 @@ export default function MovieDetail() {
     if (!movie) return <p>Loading...</p>;
 
     return (
-        <div>
+        <div className="movie-detail-page">
             <header>
                 <SearchBar />
             </header>
@@ -207,8 +218,8 @@ export default function MovieDetail() {
         </div>
     )}
 
-
 </div>
+    <BananaMeter movieId={id}/>
 
                 </div>
 

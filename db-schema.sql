@@ -159,6 +159,11 @@ CREATE TABLE group_favourites (
 
 ALTER TABLE lists ADD COLUMN share_id VARCHAR(50) UNIQUE;
 
+--NOW IN THEATERS
+ALTER TABLE movies ADD COLUMN in_theaters BOOLEAN DEFAULT FALSE;
+
+CREATE INDEX idx_movies_in_theaters ON movies(in_theaters);
+
 
 CREATE INDEX idx_movies_external_id ON movies (external_id);
 CREATE INDEX idx_ratings_user_id ON ratings (user_id);

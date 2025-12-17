@@ -4,6 +4,7 @@ import {
     checkGroupFavourite,
     getAllGroupFavourites
 } from "../models/groupFavouritesModel.js";
+import * as groupsModel from "../models/groupsModel.js";
 
 
 export async function getGroupFavourites(req, res) {
@@ -22,8 +23,19 @@ export async function getGroupFavourites(req, res) {
 /* POST: add movie to group favourites */
 export async function createGroupFavourite(req, res) {
     try {
+        const userId = req.user.userId;
         const { groupId } = req.params;
-        const { movieId, userId } = req.body;
+        const { movieId } = req.body;
+        
+        const group = await groupsModel.getGroupById(groupId);
+        if (!group) {
+            return res.status(404).json({ error: "Group not found" });
+        }
+
+        const isMember = await groupsModel.isUserMember(userId, groupId);
+        if (!isMember) {
+            return res.status(403).json({ error: "Only group members can add favourites" });
+        }
 
         const result = await addFavouriteToGroup(groupId, movieId, userId);
 
@@ -37,10 +49,20 @@ export async function createGroupFavourite(req, res) {
 /* DELETE: remove movie from group favourites */
 export async function deleteGroupFavourite(req, res) {
     try {
+        const userId = req.user.userId;
         const { groupId, movieId } = req.params;
 
-        const result = await removeFavouriteFromGroup(groupId, movieId);
+        const group = await groupsModel.getGroupById(groupId);
+        if (!group) {
+            return res.status(404).json({ error: "Group not found" });
+        }
 
+        const isMember = await groupsModel.isUserMember(userId, groupId);
+        if (!isMember) {
+            return res.status(403).json({ error: "Only group members can remove favourites" });
+        }
+
+        const result = await removeFavouriteFromGroup(groupId, movieId);
         if (!result) {
             return res.status(404).json({ error: "Favourite not found" });
         }
