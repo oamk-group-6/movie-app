@@ -5,7 +5,7 @@ import ProfileSidebar from "./profileSidebar";
 import { logout } from './login/logout.jsx';
 import colorBanana from '../assets/colorBanana.png';
 
-const token = localStorage.getItem("token");
+const token = sessionStorage.getItem("token");
 const isLoggedIn = !!token;
 const avatarSrc = "/default-avatar.png";
 
