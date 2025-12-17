@@ -3,6 +3,7 @@ import pool from "../database.js";
 // getAllMovies with optional userId
 export async function getAllMovies(filters = {}, userId) {
   const {
+    search,
     genres,
     yearFrom,
     yearTo,
@@ -27,6 +28,15 @@ export async function getAllMovies(filters = {}, userId) {
   `;
 
   if (userId) params.push(userId);
+
+  if(search) {
+    const words = search.trim().split(/\s+/);
+
+    words.forEach((word) => {
+      params.push(word);
+      conditions.push(`m.title ILIKE '%' || $${params.length} || '%'`);
+    });
+  }
 
   // Genre
   if (genres && genres.length > 0) {
@@ -182,3 +192,5 @@ export async function getNowPlayingMovies(limit = 40) {
   const result = await pool.query(query, [limit]);
   return result.rows;
 }
+
+
