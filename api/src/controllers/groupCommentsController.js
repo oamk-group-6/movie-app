@@ -30,6 +30,11 @@ export const createGroupComment = async (req, res) => {
             return res.status(400).json({ error: "Missing content or group_id" });
         }
 
+        const isMember = await gcModel.isUserMemberOfGroup(userId, group_id);
+        if (!isMember) {
+            return res.status(403).json({ error: "You must be a member of the group to comment" });
+        }
+
         const newComment = await gcModel.addGroupComment({
             user_id: userId,
             group_id,
