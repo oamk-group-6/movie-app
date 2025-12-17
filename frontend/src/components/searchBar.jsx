@@ -3,13 +3,31 @@ import { useNavigate } from "react-router-dom";
 import "./searchBar.css"
 import ProfileSidebar from "./profileSidebar";
 import { logout } from './login/logout.jsx';
+import { useEffect, useState } from 'react';
 
-const token = sessionStorage.getItem("token");
-  const isLoggedIn = !!token;
-const avatarSrc = "/default-avatar.png"; // Vaihda tähän käyttäjän profiilikuvan lähde tarvittaessa
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function SearchBar() {
     const navigate = useNavigate();
+
+    const token = sessionStorage.getItem("token");
+    const isLoggedIn = !!token;
+    const avatarSrc = "/default-avatar.png"; // Vaihda tähän käyttäjän profiilikuvan lähde tarvittaessa
+
+
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        if(!token) return;
+
+        fetch(`${API_URL}/users/me`, { headers: {Authorization: `Bearer ${token}`} })
+            .then(res => res.json())
+            .then(data => {
+                setUser(data)
+            })
+
+    }, [token]);
+
     return (
         <div className="search-bar-container">
             <img src="/search-icon.png" alt="Search Icon" style={{ width: 20, height: 20, verticalAlign: 'middle', marginRight: 8 }} />
@@ -33,9 +51,9 @@ export default function SearchBar() {
 
 {isLoggedIn &&(
                 <div className="part">
-                    <p>Hei user</p>
+                    <p>Hei, {user?.username}</p>
                     <button type="button" className="profile-button" onClick={() => navigate('/UserPage')}>
- <img src={avatarSrc} alt="Profile"/>
+ <img className="profile-pic" src={`${API_URL}${user?.avatar_url}` || {avatarSrc}} alt="Profile"/>
 </button>
 <button className="button" onClick={logout}>Log out</button>           
 

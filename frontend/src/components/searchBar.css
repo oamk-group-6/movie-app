@@ -111,3 +111,8 @@ ul li a {
 ul li a:hover {
   background-color: #111111;
 }
+
+.profile-pic{
+    max-width: 20px;
+    max-height: 20px;
+}
