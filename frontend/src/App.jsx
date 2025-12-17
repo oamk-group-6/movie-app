@@ -7,7 +7,7 @@ import HomePage from "./components/homePage.jsx"
 import GroupsPage from "./components/groups/groupsPage.jsx";
 import CreateGroupPage from "./components/groups/createGroupPage.jsx";
 import GroupDetails from "./components/groups/groupDetail.jsx";
-
+import ResultsPage from "./components/resultsPage.jsx";
 import UserPage from "./components/userPage.jsx";
 import MovieDetail from "./components/movieDetail.jsx"
 import ReviewMovie from "./components/reviewMovie.jsx"
@@ -36,7 +36,6 @@ function App() {
         {/* Group Details */}
         <Route path="/groups/:id" element={<GroupDetails />} />
 
-
         {/**User page */}
         <Route path="/userpage" element={<UserPage />} />
 
@@ -45,6 +44,9 @@ function App() {
 
         {/* Movie Review Page */}
         <Route path="/movies/:id/review" element={<ReviewMovie />} />
+
+        {/* Search Results Page */}
+        <Route path="/results" element={<ResultsPage />} />
 
       </Routes>
     </Router>

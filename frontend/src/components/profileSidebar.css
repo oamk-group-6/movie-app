@@ -7,7 +7,7 @@
 
 .profile-sidebar h2 {
   margin-bottom: 10px;
-  color: #fff; /* otsikko valkoiseksi */
+  color: #fff; 
 }
 
 .profile-sidebar input,
@@ -19,19 +19,18 @@
   box-sizing: border-box;
   border: 1px solid #666;
   border-radius: 4px;
-  background-color: #222; /* tummempi kenttä */
-  color: #fff;           /* teksti valkoiseksi */
+  background-color: #222; 
+  color: #fff;          
 }
 
-/* Profiilikuva ja placeholder */
+/* Profiilikuva */
 .profile-avatar,
 .profile-picture {
-  width: 100px;            /* kiinteä leveys */
-  height: 100px;           /* kiinteä korkeus */
-  border-radius: 50%;      /* ympyrän muoto */
+  width: 100px;           
+  height: 100px;           
+  border-radius: 50%;     
   object-fit: cover;       /* rajaa kuvan ympyrän sisään */
   margin-bottom: 10px;
-  border: 2px solid #FFD700; /* keltainen reunus */
-  background-color: #ccc;  /* jos kuvaa ei ole, näkyy harmaa ympyrä */
-  display: block;          /* varmistaa että kuvassa ei ole ylimääräisiä inline-margineja */
+  border: 2px solid #FFD700; 
+  display: block;         
 }
