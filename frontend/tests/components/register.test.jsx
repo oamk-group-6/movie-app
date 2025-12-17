@@ -16,6 +16,8 @@ const renderRegister = () =>
 describe("Register component (new tests)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    delete window.location;
+    window.location = { href: "" };
   });
 
   it("renders register form with inputs and SearchBar", () => {
