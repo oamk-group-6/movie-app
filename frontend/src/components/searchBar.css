@@ -121,3 +121,8 @@ ul li a:hover {
     text-align: center;
   }
 }
+
+.profile-pic{
+    max-width: 20px;
+    max-height: 20px;
+}
