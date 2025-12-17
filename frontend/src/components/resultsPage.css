@@ -1,0 +1,106 @@
+.userpage {
+  color: #000;
+}
+
+.search-info {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.movies-wrapper {
+  padding: 10px;
+}
+
+.movies-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 250px);
+  gap: 10px; 
+  justify-content: start; 
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.movie-card {
+  background-color: #FFD700;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  height: 500px;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.movie-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.movie-card h4 {
+  font-size: 1rem;
+  margin: 4px 0 2px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.movie-card p {
+  font-size: 0.85rem;
+  margin: 2px 0;
+}
+
+.movie-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.movie-user-rating {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+}
+
+.movie-average-bar {
+  width: 70%;
+  height: 25px;
+  background-color: #8B4513;
+  border: 2px solid #8B4513;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.movie-average-fill {
+  height: 100%;
+  background-color: #FFD700;
+  border-radius: 3px 0 0 3px;
+  transition: width 0.3s ease;
+}
+
+.movie-average-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #000;
+  white-space: nowrap;
+}
