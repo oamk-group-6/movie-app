@@ -3,7 +3,9 @@ import * as ratingsModel from "../models/ratingsModel.js"
 export const rateMovie = async (req, res) => {
     try {
         const userId = req.user.userId;
-        const { movieId, rating, review } = req.body;
+        const movieId = Number(req.body.movieId);
+        const rating = Number(req.body.rating);
+        const review = req.body.review;
 
         if (rating < 0 || rating > 100) {
             return res.status(400).json({ error: "Rating must be between 0 and 100" });
