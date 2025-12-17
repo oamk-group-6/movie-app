@@ -31,10 +31,7 @@ export async function getUserByUsername(username) {
 
 export async function searchUsersByUsername(username) {
   const result = await pool.query(
-    `SELECT id::int, username 
-     FROM users 
-     WHERE username ILIKE $1
-     LIMIT 10`,
+    `SELECT id::int, username FROM users WHERE username ILIKE $1 LIMIT 10`,
     [username + "%"]
   );
   return result.rows;

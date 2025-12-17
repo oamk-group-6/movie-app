@@ -37,7 +37,7 @@ export const createList = async (req, res) => {
       });
     }
 
-    const newList = await ListsModel.addList({
+    const newList = await listsModel.addList({
       name,
       description,
       owner_user_id: owner_user_id || null,
