@@ -80,7 +80,7 @@ export async function updatePassword(id, oldPassword, newPassword) {
   const newHash = await bcrypt.hash(newPassword, 10);
 
   const updateRes = await pool.query(
-    "UPDATE users SET password_hash = $1 WHERE id = $2 RETURNING id, username, email, updated_at",
+    "UPDATE users SET password_hash = $1 WHERE id = $2 RETURNING id, username, email",
     [newHash, id]
   );
 
@@ -102,7 +102,7 @@ export async function patchUser(id, fields) {
     UPDATE users
     SET ${setClauses}
     WHERE id = $${keys.length + 1}
-    RETURNING id, username, email, avatar_url, updated_at
+    RETURNING id, username, email, avatar_url
   `;
 
   const result = await pool.query(query, [...values, id]);
@@ -119,7 +119,7 @@ export async function updateAvatar(userId, avatarUrl) {
     UPDATE users
     SET avatar_url = $1
     WHERE id = $2
-    RETURNING id, username, email, avatar_url, bio, created_at;
+    RETURNING id, username, email, avatar_url, bio;
   `;
   const values = [avatarUrl, userId];
   const result = await pool.query(query, values);
