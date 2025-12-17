@@ -13,8 +13,7 @@ export async function getCommentById(id) {
 export async function addComment(comment) {
   const { user_id, movie_id, list_id, content } = comment;
   const result = await pool.query(
-    `INSERT INTO comments (user_id, movie_id, list_id, content)
-     VALUES ($1,$2,$3,$4) RETURNING *`,
+    `INSERT INTO comments (user_id, movie_id, list_id, content) VALUES ($1,$2,$3,$4) RETURNING *`,
     [user_id, movie_id, list_id, content]
   );
   return result.rows[0];

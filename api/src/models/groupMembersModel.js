@@ -18,6 +18,7 @@ export async function removeMember(groupId, userId) {
      RETURNING *`,
     [groupId, userId]
   );
+  return result.rows[0];
 }
 
 export async function getGroupMembers(groupId) {
