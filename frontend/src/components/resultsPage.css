@@ -1,25 +1,144 @@
-.userpage {
-  color: #000;
+/* ---------------- NAVBAR ---------------- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120px; 
+  background-color: #1e1e1e;
+  z-index: 1000; 
 }
 
-.search-info {
-  text-align: center;
-  margin-bottom: 1rem;
-  font-size: 1rem;
+/* ---------------- USERPAGE ---------------- */
+.userpage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 120px; 
+  min-height: 100vh;
+  background-color: #121212;
+  color: #fff;
+  width: 100%;
+}
+
+/* ---------------- FILTER DROPDOWNS ---------------- */
+.filter-dropdown,
+.genre-dropdown {
+  position: relative; 
+  display: inline-block;
+  margin-bottom: 10px;
+  z-index: 1; 
+}
+
+.filter-dropdown button,
+.genre-dropdown button,
+.filters-container button {
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #1e1e1e;
+  color: #fff;
+  cursor: pointer;
+}
+
+.filter-dropdown button:hover,
+.genre-dropdown button:hover,
+.filters-container button:hover {
+  background-color: #333;
+}
+
+/* ---------------- DROPDOWN MENU ---------------- */
+.dropdown-menu {
+  position: absolute; 
+  top: 100%;
+  left: 0;
+  width: 200px;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  list-style: none;
+  padding: 5px 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 200; 
+}
+
+.dropdown-menu li {
+  padding: 5px 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropdown-menu li:hover {
+  background-color: #333;
+}
+
+/* ---------------- FILTERS CONTAINER ---------------- */
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  width: 100%;
+  position: relative; 
+}
+
+
+.filter-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+
+.filter-inputs input {
+  width: 80px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #1e1e1e;
   color: #fff;
 }
 
-.movies-wrapper {
-  padding: 10px;
+
+.genre-dropdown {
+  display: flex;
+  flex-direction: column;
 }
 
-.movies-container {
+.genre-dropdown .dropdown-menu {
+  top: 110%; 
+}
+
+.genre-dropdown-active-genres {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.genre-dropdown-active-genres span {
+  background-color: #1e1e1e;
+  padding: 3px 8px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  font-size: 0.85rem;
+}
+
+/* ---------------- MOVIE GRID ---------------- */
+.results-placeholder {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 250px);
-  gap: 10px; 
-  justify-content: start; 
-  max-height: 80vh;
-  overflow-y: auto;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+  justify-items: start;
+  width: 90%;
+  padding-top: 20px;
+  margin-bottom: 30px;
 }
 
 .movie-card {
@@ -29,12 +148,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 250px;
-  height: 500px;
+  width: 220px;
   box-sizing: border-box;
-  text-decoration: none;
-  color: inherit;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  color: #000;
+  margin-bottom: 15px;
 }
 
 .movie-card:hover {
@@ -47,7 +166,7 @@
   border-radius: 8px;
 }
 
-.movie-card h4 {
+.movie-card h3 {
   font-size: 1rem;
   margin: 4px 0 2px 0;
   overflow: hidden;
@@ -58,6 +177,7 @@
 .movie-card p {
   font-size: 0.85rem;
   margin: 2px 0;
+  text-align: center;
 }
 
 .movie-footer {
@@ -74,33 +194,4 @@
   font-weight: bold;
   color: #000;
   text-align: center;
-}
-
-.movie-average-bar {
-  width: 70%;
-  height: 25px;
-  background-color: #8B4513;
-  border: 2px solid #8B4513;
-  border-radius: 5px;
-  overflow: hidden;
-  position: relative;
-  box-sizing: border-box;
-}
-
-.movie-average-fill {
-  height: 100%;
-  background-color: #FFD700;
-  border-radius: 3px 0 0 3px;
-  transition: width 0.3s ease;
-}
-
-.movie-average-number {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.75rem;
-  font-weight: bold;
-  color: #000;
-  white-space: nowrap;
 }

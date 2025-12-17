@@ -1,71 +1,213 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import SearchBar from "./searchBar"; 
-import "./favMovies.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import SearchBar from "./searchBar";
+import BananaMeter from "./bananameter";
+import "./resultsPage.css";
 
-export default function ResultsPageMock() {
+const API_URL = process.env.REACT_APP_API_URL;
+
+const availableFilters = ["Rating", "Release Year", "Genre"];
+const allGenres = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Romance", "Thriller"];
+
+export default function ResultsPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+
+  const [query, setQuery] = useState(params.get("search") || "");
+
+  // Filters
+  const [activeFilters, setActiveFilters] = useState([]);
+  const [ratingMin, setRatingMin] = useState(params.get("ratingMin") || "");
+  const [ratingMax, setRatingMax] = useState(params.get("ratingMax") || "");
+  const [yearFrom, setYearFrom] = useState(params.get("yearFrom") || "");
+  const [yearTo, setYearTo] = useState(params.get("yearTo") || "");
+  const [genres, setGenres] = useState(params.get("genres")?.split(",") || []);
+
   const [movies, setMovies] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("Batman"); // mock-haku
+  const [loading, setLoading] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [genreDropdownOpen, setGenreDropdownOpen] = useState(false);
+
+  const toggleFilter = (filter) => {
+    setActiveFilters((prev) =>
+      prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
+    );
+  };
+
+  const toggleGenre = (genre) => {
+    setGenres((prev) =>
+      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
+    );
+  };
+
+  const clearFilters = () => {
+    setRatingMin("");
+    setRatingMax("");
+    setYearFrom("");
+    setYearTo("");
+    setGenres([]);
+    setActiveFilters([]);
+  };
+
+  const fetchMovies = async () => {
+    setLoading(true);
+    const searchParams = new URLSearchParams();
+
+    if (query) searchParams.set("search", query);
+    if (ratingMin) searchParams.set("ratingMin", ratingMin);
+    if (ratingMax) searchParams.set("ratingMax", ratingMax);
+    if (yearFrom) searchParams.set("yearFrom", yearFrom);
+    if (yearTo) searchParams.set("yearTo", yearTo);
+    if (genres.length) searchParams.set("genres", genres.join(","));
+    searchParams.set("limit", 50);
+
+    navigate(`/results?${searchParams.toString()}`, { replace: true });
+
+    try {
+      const res = await fetch(`${API_URL}/movies?${searchParams.toString()}`);
+      const data = await res.json();
+      setMovies(data);
+    } catch (err) {
+      console.error(err);
+      setMovies([]);
+    }
+
+    setLoading(false);
+  };
 
   useEffect(() => {
-    // Luodaan 25 satunnaista mock-elokuvaa
-    const mockMovies = Array.from({ length: 25 }, (_, i) => ({
-      id: i + 1,
-      title: `Movie ${i + 1}`,
-      release_year: 2000 + Math.floor(Math.random() * 23),
-      poster_url: "https://via.placeholder.com/200x300?text=Poster",
-      user_rating: Math.random() < 0.7 ? Math.floor(Math.random() * 101) : null, // 70% todennäköisyydellä arvio
-      random_bananameter: Math.floor(Math.random() * 31) + 70
-    }));
-
-    setMovies(mockMovies);
-  }, []);
+    fetchMovies();
+  }, [ratingMin, ratingMax, yearFrom, yearTo, genres]);
 
   return (
-    <div className="userpage">
-      <header style={{ maxWidth: 600, margin: "0 auto", textAlign: "center", paddingBottom: "1rem" }}>
-        <h1>Hakutulokset (mock)</h1>
-        <SearchBar onSearch={(query) => console.log("Search:", query)} />
-      </header>
+    <>
+      {/* Navbar */}
+      <SearchBar />
 
-      {/* Teksti hausta */}
-      <div style={{ textAlign: "center", marginBottom: "1rem", fontSize: "1rem", color: "#fff" }}>
-        Showing results for search: "{searchQuery}"
-      </div>
+      {/* Userpage alkaa navbarin alapuolelta */}
+      <div className="userpage">
+        {/* Spacer jotta navbar ei peitä filtereitä */}
+        <div style={{ height: "120px" }} />
 
-      <div className="fav-movies-wrapper">
-        <div className="fav-movies-container">
-          {movies.map(movie => (
-            <Link
-              to={`/movies/${movie.id}`}
-              key={movie.id}
-              className="fav-movie-card"
-            >
-              <img src={movie.poster_url} alt={movie.title} />
-              <h4>{movie.title}</h4>
-              <p>{movie.release_year}</p>
+        {/* Select Filters */}
+        <div className="filter-dropdown">
+          <button onClick={() => setDropdownOpen((prev) => !prev)}>
+            Select Filters {dropdownOpen ? "▲" : "▼"}
+          </button>
+          {dropdownOpen && (
+            <ul className="dropdown-menu">
+              {availableFilters.map((f) => (
+                <li key={f} onClick={() => toggleFilter(f)}>
+                  {f} {activeFilters.includes(f) && "✔"}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-              <div className="movie-footer">
-                <div className="movie-user-rating">
-                  {movie.user_rating != null
-                    ? `Your rating: ${movie.user_rating}%`
-                    : "You haven't rated this movie yet"}
+        
+        <button onClick={clearFilters} style={{ marginLeft: "15px" }}>
+          Clear Filters
+        </button>
+
+       
+        <div className="filters-container">
+          {activeFilters.includes("Rating") && (
+            <div className="filter-inputs">
+              <input
+                type="number"
+                placeholder="Min rating"
+                value={ratingMin}
+                onChange={(e) => setRatingMin(e.target.value)}
+                min={0}
+                max={100}
+              />
+              <input
+                type="number"
+                placeholder="Max rating"
+                value={ratingMax}
+                onChange={(e) => setRatingMax(e.target.value)}
+                min={0}
+                max={100}
+              />
+            </div>
+          )}
+
+          {activeFilters.includes("Release Year") && (
+            <div className="filter-inputs">
+              <input
+                type="number"
+                placeholder="Year from"
+                value={yearFrom}
+                onChange={(e) => setYearFrom(e.target.value)}
+                min={1970}
+                max={2025}
+              />
+              <input
+                type="number"
+                placeholder="Year to"
+                value={yearTo}
+                onChange={(e) => setYearTo(e.target.value)}
+                min={1970}
+                max={2025}
+              />
+            </div>
+          )}
+
+          {activeFilters.includes("Genre") && (
+            <div className="genre-dropdown">
+              <button onClick={() => setGenreDropdownOpen((prev) => !prev)}>
+                Select Genre {genreDropdownOpen ? "▲" : "▼"}
+              </button>
+              {genreDropdownOpen && (
+                <ul className="dropdown-menu">
+                  {allGenres.map((g) => (
+                    <li key={g} onClick={() => toggleGenre(g)}>
+                      {g} {genres.includes(g) && "✔"}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {genres.length > 0 && (
+                <div className="genre-dropdown-active-genres">
+                  {genres.map((g) => (
+                    <span key={g}>{g}</span>
+                  ))}
                 </div>
+              )}
+            </div>
+          )}
+        </div>
 
-                <div className="movie-average-bar">
-                  <div
-                    className="movie-average-fill"
-                    style={{ width: `${movie.random_bananameter}%` }}
-                  />
-                  <span className="movie-average-number">
-                    Bananameter: {movie.random_bananameter}% 🍌
-                  </span>
+        
+        <div className="results-placeholder">
+          {loading && <p>Loading movies...</p>}
+          {!loading && movies.length === 0 && <p>No movies found.</p>}
+          {!loading &&
+            movies.map((movie) => (
+              <div
+                key={movie.id}
+                className="movie-card"
+                onClick={() => navigate(`/movies/${movie.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <img src={movie.poster_url} alt={movie.title} />
+                <h3>{movie.title}</h3>
+                <p>{movie.release_year}</p>
+                <div className="movie-footer">
+                  {movie.user_rating !== null && (
+                    <div className="movie-user-rating">
+                      Your rating: {Math.round(movie.user_rating)}%
+                    </div>
+                  )}
+                  <BananaMeter movieId={movie.id} />
                 </div>
               </div>
-            </Link>
-          ))}
+            ))}
         </div>
       </div>
-    </div>
+    </>
   );
 }
