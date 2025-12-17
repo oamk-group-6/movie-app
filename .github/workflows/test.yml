@@ -3,9 +3,11 @@ name: CI Tests
 on:
   push:
     branches:
+      - main
       - features
   pull_request:
     branches:
+      - main
       - features
 
 jobs:
