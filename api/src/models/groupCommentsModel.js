@@ -1,5 +1,16 @@
 import pool from "../database.js";
 
+export async function isUserMemberOfGroup(userId, groupId) {
+  const result = await pool.query(
+    `SELECT 1
+     FROM group_members
+     WHERE user_id = $1 AND group_id = $2`,
+    [userId, groupId]
+  );
+  return result.rows.length > 0;
+}
+
+
 export async function getAllGroupComments() {
     const result = await pool.query(
         "SELECT * FROM group_comments ORDER BY created_at DESC"
