@@ -9,6 +9,7 @@
   left: 0;
   padding: 10px 20px;
   box-sizing: border-box;
+  flex-wrap: wrap; /* allow wrapping on small screens */
 }
 
 /* Logo */
@@ -29,17 +30,21 @@
   color: #583308;
 }
 
+/* Navigation + search */
 .middle-section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1; /* take available space */
 }
 
 ul {
   display: flex;
+  gap: 15px;
   list-style: none;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
 }
 
 ul li a {
@@ -69,6 +74,38 @@ ul li a:hover {
   gap: 10px;
 }
 
+/* Profile section */
+.part {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.part p {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #583308;
+}
+
+.profile-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #583308;
+}
+
 .button {
   background-color: #583308;
   color: #F4EB49;
@@ -78,33 +115,36 @@ ul li a:hover {
   cursor: pointer;
 }
 
-.profile-button img {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-
-@media (max-width: 768px) {
+/* 📱 Responsive tweaks */
+@media (max-width: 1024px) {
   .search-bar-container {
     flex-direction: column;
     align-items: center;
   }
 
+  .middle-section {
+    margin-top: 10px;
+  }
+
   ul {
     flex-direction: column;
     gap: 10px;
-    margin-top: 10px;
   }
 
   .right-section {
     margin-top: 10px;
     flex-direction: column;
   }
+
+  .part {
+    flex-direction: row;
+    gap: 5px;
+  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 800px) {
   .logo {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
   }
 
@@ -120,9 +160,19 @@ ul li a:hover {
     width: 100%;
     text-align: center;
   }
+
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+  }
+
+  .button {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
 }
 
-.profile-pic{
-    max-width: 20px;
-    max-height: 20px;
+.nav-links {
+  display: flex;
+  flex-direction: row;
 }
