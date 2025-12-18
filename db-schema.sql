@@ -56,7 +56,7 @@ CREATE TABLE group_invitations (
   id SERIAL PRIMARY KEY,
   group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
   invited_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  invited_by_user_id INTEGER REFERENCES users(id),
+  invited_by_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   status VARCHAR(20) DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
