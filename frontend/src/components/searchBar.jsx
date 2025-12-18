@@ -41,7 +41,7 @@ export default function SearchBar() {
 
             {/* Navigation + search */}
             <div className="middle-section">
-                <ul>
+                <ul className="nav-links">
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/UserPage">UserPage</Link></li>
                     <li><Link to="/Groups">Groups</Link></li>
