@@ -82,10 +82,6 @@ export default function Login() {
                         </span>
                     </div>
 
-                    <a className="forgot-password" href="/forgot-password">
-                        Forgot password?
-                    </a>
-
                     {/* Login nappi */}
                     <button className="login-btn" type="submit">
                         Log in
