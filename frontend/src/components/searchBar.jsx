@@ -76,7 +76,7 @@ export default function SearchBar() {
                         >
                             <img 
                                 className="profile-pic" 
-                                src={user?.avatar_url ? `${API_URL}${user.avatar_url}` : avatarSrc} 
+                                src={`${API_URL}${user?.avatar_url}` || avatarSrc} 
                                 alt="Profile" 
                             />
                         </button>
