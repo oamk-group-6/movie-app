@@ -212,9 +212,8 @@ export async function createJoinRequest(userId, groupId) {
 
 export async function acceptInvite(inviteId, userId) {
   const res = await pool.query(
-    `UPDATE group_invitations 
-     SET status = 'accepted' 
-     WHERE id = $1 AND invited_user_id = $2
+    `DELETE FROM group_invitations
+     WHERE id = $1
      RETURNING *`,
     [inviteId, userId]
   );
